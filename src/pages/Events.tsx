@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { eventsService, Event } from '../services/api/events';
 
 export const Events = () => {
@@ -97,8 +98,9 @@ export const Events = () => {
       ) : (
         <div className="events-grid">
           {events.map((event) => (
-            <div
+            <Link
               key={event.id}
+              to={`/events/${event.id}`}
               className="event-card"
             >
               <h2 className="event-title">{event.name}</h2>
@@ -111,6 +113,7 @@ export const Events = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="event-website"
+                  onClick={(e) => e.stopPropagation()}
                 >
                   Visit Website
                 </a>
@@ -118,7 +121,7 @@ export const Events = () => {
               {event.contacts && (
                 <p className="event-contacts">Contacts: {event.contacts}</p>
               )}
-            </div>
+            </Link>
           ))}
         </div>
       )}

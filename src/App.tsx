@@ -4,6 +4,7 @@ import { ProtectedRoute } from './components/ProtectedRoute';
 import { Login } from './pages/Login';
 import { Dashboard } from './pages/Dashboard';
 import { Events } from './pages/Events';
+import { EventDetail } from './pages/EventDetail';
 import Layout from './components/Layout';
 import './App.css';
 import './styles/mobile.css';
@@ -28,6 +29,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <Events />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/events/:id"
+              element={
+                <ProtectedRoute>
+                  <EventDetail />
                 </ProtectedRoute>
               }
             />
