@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import { useAuthContext } from '../context/AuthContext';
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
     const [menuOpen, setMenuOpen] = useState(false);
-    const { isAuthenticated, logout } = useAuth();
+    const { isAuthenticated, logout } = useAuthContext();
     const location = useLocation();
 
     const toggleMenu = () => {
