@@ -47,6 +47,9 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
                                 <li className={location.pathname === '/dashboard' ? 'active' : ''}>
                                     <Link to="/dashboard" onClick={closeMenu}>Dashboard</Link>
                                 </li>
+                                <li className={location.pathname === '/events' ? 'active' : ''}>
+                                    <Link to="/events" onClick={closeMenu}>Events</Link>
+                                </li>
                                 <li className={location.pathname === '/profile' ? 'active' : ''}>
                                     <Link to="/profile" onClick={closeMenu}>Profile</Link>
                                 </li>
