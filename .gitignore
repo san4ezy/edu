@@ -11,6 +11,7 @@ yarn-error.log
 
 # React
 build/
+dist/
 .DS_Store
 
 # Miscellaneous

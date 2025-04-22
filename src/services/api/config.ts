@@ -1,6 +1,6 @@
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+import axios, { AxiosInstance, AxiosResponse } from 'axios';
 
-export const API_BASE_URL = 'http://localhost:8110/api/v1';
+export const API_BASE_URL = import.meta.env.VITE_API_URL;
 
 export interface ApiResponse<T> {
   success: boolean;
