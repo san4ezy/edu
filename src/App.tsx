@@ -5,6 +5,7 @@ import { Login } from './pages/Login';
 import { Dashboard } from './pages/Dashboard';
 import { Events } from './pages/Events';
 import { EventDetail } from './pages/EventDetail';
+import Home from './pages/Home';
 import Layout from './components/Layout';
 import './App.css';
 import './styles/mobile.css';
@@ -16,6 +17,7 @@ function App() {
         <Layout>
           <Routes>
             <Route path="/login" element={<Login />} />
+            <Route path="/" element={<Home />} />
             <Route
               path="/dashboard"
               element={
@@ -40,7 +42,6 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            <Route path="/" element={<Navigate to="/dashboard" replace />} />
           </Routes>
         </Layout>
       </Router>

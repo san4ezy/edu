@@ -1,4 +1,5 @@
 import { apiClient } from './config';
+import { telegramService, TelegramUser } from './telegram';
 
 export interface SignupData {
   phone_number: string;
@@ -15,6 +16,7 @@ export interface LoginData {
 export interface TokenResponse {
   access: string;
   refresh: string;
+  user?: TelegramUser;
 }
 
 export interface ApiResponse<T> {
@@ -32,6 +34,12 @@ export const authService = {
   },
 
   async login(data: LoginData): Promise<TokenResponse> {
+    // Check if we're in Telegram Web App
+    if (telegramService.isTelegramWebApp()) {
+      return telegramService.authenticateWithTelegram();
+    }
+
+    // Regular JWT login
     const response = await apiClient.post<ApiResponse<TokenResponse>>('/users/auth/token/obtain/', data);
     const { access, refresh } = response.data.data;
     
@@ -60,4 +68,12 @@ export const authService = {
     const response = await apiClient.get<ApiResponse<any>>('/users/users/me/');
     return response.data.data;
   },
-}; 
+
+  isAuthenticated(): boolean {
+    return !!localStorage.getItem('access_token');
+  },
+
+  isTelegramUser(): boolean {
+    return telegramService.isTelegramWebApp() && !!telegramService.getTelegramUser();
+  }
+};

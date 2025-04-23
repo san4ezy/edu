@@ -1,11 +1,11 @@
 import { createContext, useContext, ReactNode } from 'react';
 import { useAuth } from '../hooks/useAuth';
-import { LoginData, SignupData } from '../services/api/auth';
 
 interface AuthContextType {
     isAuthenticated: boolean;
-    login: (data: LoginData) => Promise<boolean>;
-    signup: (data: SignupData) => Promise<boolean>;
+    isTelegramUser: boolean;
+    isLoading: boolean;
+    login: (credentials: any) => Promise<boolean>;
     logout: () => Promise<boolean>;
     checkAuth: () => Promise<boolean>;
 }
