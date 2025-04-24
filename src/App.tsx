@@ -9,7 +9,6 @@ import PrivateRoute from "./components/PrivateRoute";
 import { useAuth } from "./context/AuthContext.tsx";
 
 function App() {
-  // const [count, setCount] = useState(0)
   const { isAuthenticated, logout } = useAuth();
 
   return (
