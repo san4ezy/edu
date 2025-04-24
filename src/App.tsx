@@ -6,9 +6,11 @@ import ProfilePage from './pages/Profile';
 import NotFoundPage from './pages/NotFound';
 import LoginPage from "./pages/Login";
 import PrivateRoute from "./components/PrivateRoute";
+import { useAuth } from "./context/AuthContext.tsx";
 
 function App() {
   // const [count, setCount] = useState(0)
+  const { isAuthenticated, logout } = useAuth();
 
   return (
     <div className="App">
@@ -19,7 +21,11 @@ function App() {
               |{' '}
               <Link to="/">Home</Link> |{' '}
               <Link to="/profile">Profile</Link> |{' '}
-              <Link to="/login">Login</Link> |{' '}
+              {isAuthenticated ? (
+                <Link to="/" onClick={logout}>Logout</Link>
+              ) : (
+                <Link to="/login">Login</Link>
+              )} |{' '}
           </nav>
 
           <Routes>
@@ -36,7 +42,6 @@ function App() {
               />
 
               {/* Catch all 404 */}
-              {/*<Route path="*" element={<div><h2>404 Not Found</h2></div>} />*/}
               <Route path="*" element={<NotFoundPage />} />
           </Routes>
 

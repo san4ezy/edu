@@ -1,5 +1,6 @@
 import React from "react";
 import {Navigate} from "react-router-dom";
+import {useAuth} from "../context/AuthContext";
 
 const isAuthenticated = () => {
     // Fake false imitates unauthorized users
@@ -11,9 +12,12 @@ interface PrivateRouteProps {
 }
 
 function PrivateRoute({ element }: PrivateRouteProps) {
-    if (!isAuthenticated()) {
+    const { isAuthenticated } = useAuth();
+
+    if (!isAuthenticated) {
         return <Navigate to="/login" replace />;
     }
+
     return element;
 }
 
