@@ -43,6 +43,10 @@ let isAuthenticating = false;
 let authFailureCount = 0;
 const MAX_AUTH_ATTEMPTS = 3;
 
+// Telegram OAuth configuration
+const TELEGRAM_BOT_USERNAME = 'codingbrobot'; // Replace with your bot username
+const TELEGRAM_OAUTH_URL = `https://oauth.telegram.org/auth?bot_id=${TELEGRAM_BOT_USERNAME}&origin=${window.location.origin}&return_to=${window.location.origin}/auth/telegram`;
+
 export const telegramService = {
   isTelegramWebApp(): boolean {
     return typeof window.Telegram !== 'undefined' && window.Telegram.WebApp !== undefined;
@@ -56,6 +60,14 @@ export const telegramService = {
   },
 
   async authenticateWithTelegram(): Promise<TelegramAuthResponse> {
+    if (this.isTelegramWebApp()) {
+      return this.authenticateWithMiniApp();
+    } else {
+      return this.authenticateWithOAuth();
+    }
+  },
+
+  async authenticateWithMiniApp(): Promise<TelegramAuthResponse> {
     if (!this.isTelegramWebApp()) {
       throw new Error('Not running in Telegram Web App');
     }
@@ -80,6 +92,7 @@ export const telegramService = {
         const currentTime = Date.now();
         
         if (currentTime < expirationTime) {
+          console.log('Using existing valid token');
           return {
             access: existingToken,
             refresh: localStorage.getItem('refresh_token') || '',
@@ -87,6 +100,7 @@ export const telegramService = {
           };
         }
       } catch (error) {
+        console.log('Existing token is invalid, proceeding with new authentication');
         // Token is invalid, continue with new authentication
         localStorage.removeItem('access_token');
         localStorage.removeItem('refresh_token');
@@ -111,11 +125,14 @@ export const telegramService = {
       localStorage.setItem('access_token', access);
       localStorage.setItem('refresh_token', refresh);
       
+      console.log('Successfully saved new tokens');
+      
       // Reset failure count on successful authentication
       authFailureCount = 0;
       
       return response.data;
     } catch (error) {
+      console.error('Authentication failed:', error);
       // Increment failure count
       authFailureCount++;
       
@@ -127,6 +144,17 @@ export const telegramService = {
     } finally {
       isAuthenticating = false;
     }
+  },
+
+  async authenticateWithOAuth(): Promise<TelegramAuthResponse> {
+    // Redirect to Telegram OAuth
+    window.location.href = TELEGRAM_OAUTH_URL;
+    // This will never be reached as the page will redirect
+    throw new Error('Redirecting to Telegram OAuth');
+  },
+
+  handleOAuthCallback(authData: any): Promise<TelegramAuthResponse> {
+    return apiClient.post<TelegramAuthResponse>('/users/auth/social/telegram/oauth/', authData);
   },
 
   initializeTelegramWebApp(): void {

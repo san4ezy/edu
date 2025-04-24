@@ -6,6 +6,7 @@ const Home = () => {
     const { isAuthenticated, isTelegramUser, isLoading } = useAuthContext();
     const telegramUser = telegramService.getTelegramUser();
     const [debugInfo, setDebugInfo] = useState<any>({});
+    const [token, setToken] = useState<string | null>(null);
 
     useEffect(() => {
         // Debug information
@@ -15,7 +16,11 @@ const Home = () => {
             initData: window.Telegram?.WebApp?.initData,
             initDataUnsafe: window.Telegram?.WebApp?.initDataUnsafe,
         });
-    }, []);
+
+        // Get token from localStorage
+        const storedToken = localStorage.getItem('access_token');
+        setToken(storedToken);
+    }, [isAuthenticated]); // Re-run when authentication status changes
 
     if (isLoading) {
         return <div>Loading...</div>;
@@ -29,6 +34,7 @@ const Home = () => {
                 <h2 className="text-xl font-semibold mb-2">App Status</h2>
                 <p>Running as Telegram Mini App: {telegramService.isTelegramWebApp() ? 'Yes' : 'No'}</p>
                 <p>Authentication Status: {isAuthenticated ? 'Authenticated' : 'Not Authenticated'}</p>
+                <p>ACCESS TOKEN: {token ? token : 'NotSet'}</p>
                 <p>Telegram User: {isTelegramUser ? 'Yes' : 'No'}</p>
             </div>
 

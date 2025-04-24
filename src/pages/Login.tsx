@@ -123,20 +123,18 @@ export const Login = () => {
           </form>
         )}
 
-        {telegramService.isTelegramWebApp() && (
-          <div className="mt-8">
-            {error && (
-              <div className="text-red-500 text-sm text-center mb-4">{error}</div>
-            )}
-            <button
-              onClick={handleTelegramLogin}
-              disabled={isLoading}
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-            >
-              {isLoading ? 'Signing in with Telegram...' : 'Sign in with Telegram'}
-            </button>
-          </div>
-        )}
+        <div className="mt-8">
+          {error && (
+            <div className="text-red-500 text-sm text-center mb-4">{error}</div>
+          )}
+          <button
+            onClick={handleTelegramLogin}
+            disabled={isLoading}
+            className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-[#0088cc] hover:bg-[#0077b3] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#0088cc]"
+          >
+            {isLoading ? 'Signing in with Telegram...' : 'Sign in with Telegram'}
+          </button>
+        </div>
       </div>
     </div>
   );

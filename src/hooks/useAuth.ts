@@ -67,7 +67,14 @@ export const useAuth = () => {
   const login = async (credentials: any) => {
     try {
       setAuthError(null);
-      await authService.login(credentials);
+      const response = await authService.login(credentials);
+      
+      // Ensure tokens are stored
+      if (response.access && response.refresh) {
+        localStorage.setItem('access_token', response.access);
+        localStorage.setItem('refresh_token', response.refresh);
+      }
+      
       await checkAuthState();
       return true;
     } catch (error) {
