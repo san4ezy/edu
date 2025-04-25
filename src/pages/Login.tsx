@@ -3,7 +3,16 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
-declare const Telegram: any;
+declare global {
+    interface Window {
+        Telegram: {
+            WebApp: {
+                initData: string;
+            };
+        };
+        onTelegramAuth: (user: any) => void;
+    }
+}
 
 function LoginPage() {
     const [phone, setPhone] = useState("");
@@ -16,38 +25,93 @@ function LoginPage() {
     // TODO: need to move it
     const API_URL = import.meta.env.VITE_API_URL;
     const BOT_TOKEN = import.meta.env.VITE_BOT_TOKEN;
-
+    const BOT_USERNAME = import.meta.env.VITE_BOT_USERNAME;
 
     // TG AUTH /////////////////////////////////////////////////////////////////////////
 
-    const handleTelegramAuth = async (telegramData: any) => {
+    const handleTelegramMiniAppAuth = async (initData: string) => {
         setLoading(true);
         setError('');
 
         try {
-            const response = await axios.post(`${API_URL}/api/v1/auth/social/telegram/`, telegramData);
+            const response = await axios.post(`${API_URL}/api/v1/telegram/mini/`, { init_data: initData });
             const { access, refresh } = response.data;
             login({ access, refresh });
-            navigate("/profile");  // Redirect
+            navigate("/profile");
         } catch (err) {
-            console.error("Telegram authentication failed:", err);
+            console.error("Telegram Mini App authentication failed:", err);
             if (axios.isAxiosError(err) && err.response) {
                 setError(err.response.data?.detail || err.response.data?.error || "Telegram authentication failed");
             } else {
                 setError("Unexpected error occurred on Telegram authorization.");
             }
             setLoading(false);
-        } finally {
-            // Something goes here
+        }
+    };
+
+    const handleTelegramWidgetAuth = async (user: any) => {
+        setLoading(true);
+        setError('');
+
+        try {
+            // Here you should use a different endpoint for widget authentication
+            const response = await axios.post(`${API_URL}/api/v1/telegram/web/`, user);
+            const { access, refresh } = response.data;
+            login({ access, refresh });
+            navigate("/profile");
+        } catch (err) {
+            console.error("Telegram Widget authentication failed:", err);
+            if (axios.isAxiosError(err) && err.response) {
+                setError(err.response.data?.detail || err.response.data?.error || "Telegram authentication failed");
+            } else {
+                setError("Unexpected error occurred on Telegram authorization.");
+            }
+            setLoading(false);
         }
     };
 
     useEffect(() => {
         if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initData) {
             console.log("Running as Telegram Mini App.");
-            handleTelegramAuth({ init_data: window.Telegram.WebApp.initData });
+            handleTelegramMiniAppAuth(window.Telegram.WebApp.initData);
         } else {
             console.log("Running as Web App.");
+            // Initialize Telegram Login Widget
+            const script = document.createElement('script');
+            script.src = 'https://telegram.org/js/telegram-widget.js?22';
+            script.setAttribute('data-telegram-login', BOT_USERNAME);
+            script.setAttribute('data-size', 'large');
+            script.setAttribute('data-radius', '8');
+            script.setAttribute('data-request-access', 'write');
+            script.setAttribute('data-userpic', 'false');
+            script.setAttribute('data-onauth', 'onTelegramAuth(user)');
+            script.setAttribute('data-lang', 'en');
+            script.setAttribute('data-corner-radius', '8');
+            script.async = true;
+            
+            // Add error handling for script loading
+            script.onerror = (error) => {
+                console.error('Failed to load Telegram login widget:', error);
+                setError('Failed to load Telegram login. Please try again later.');
+            };
+            
+            // Add the callback function
+            window.onTelegramAuth = (user: any) => {
+                if (!user) {
+                    setError('Telegram authentication failed. Please try again.');
+                    return;
+                }
+                handleTelegramWidgetAuth(user);
+            };
+            
+            // Add the script to the page
+            const container = document.getElementById('telegram-login-button');
+            if (container) {
+                container.appendChild(script);
+            } else {
+                console.error('Telegram login button container not found');
+                setError('Failed to initialize Telegram login. Please refresh the page.');
+            }
         }
     }, []);
 
