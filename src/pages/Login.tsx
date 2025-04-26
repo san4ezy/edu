@@ -2,6 +2,11 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import {
+    loginWithPhonePassword,
+    loginWithTelegramMiniApp,
+    loginWithTelegramWidget
+} from "../services/authService";
 
 declare global {
     interface Window {
@@ -23,8 +28,7 @@ function LoginPage() {
     const [loading, setLoading] = useState(false);
 
     // TODO: need to move it
-    const API_URL = import.meta.env.VITE_API_URL;
-    const BOT_TOKEN = import.meta.env.VITE_BOT_TOKEN;
+    // const API_URL = import.meta.env.VITE_API_URL;
     const BOT_USERNAME = import.meta.env.VITE_BOT_USERNAME;
 
     // TG AUTH /////////////////////////////////////////////////////////////////////////
@@ -34,7 +38,7 @@ function LoginPage() {
         setError('');
 
         try {
-            const response = await axios.post(`${API_URL}/api/v1/telegram/mini/`, { init_data: initData });
+            const response = await loginWithTelegramMiniApp(initData);
             const { access, refresh } = response.data;
             login({ access, refresh });
             navigate("/profile");
@@ -55,7 +59,7 @@ function LoginPage() {
 
         try {
             // Here you should use a different endpoint for widget authentication
-            const response = await axios.post(`${API_URL}/api/v1/telegram/web/`, user);
+            const response = await loginWithTelegramWidget(user);
             const { access, refresh } = response.data;
             login({ access, refresh });
             navigate("/profile");
@@ -122,10 +126,7 @@ function LoginPage() {
         setError("");
 
         try {
-            const response = await axios.post(`${API_URL}/api/v1/auth/token/obtain/`, {
-                phone_number: phone,
-                password: password,
-            });
+            const response = await loginWithPhonePassword(phone, password);
             const { access, refresh } = response.data["data"];
             login({access, refresh});
             navigate("/profile");
