@@ -26,6 +26,7 @@ function LoginPage() {
     const navigate = useNavigate();
     const { login } = useAuth();
     const [loading, setLoading] = useState(false);
+    const { isAuthenticated, logout } = useAuth();
 
     // TODO: need to move it
     // const API_URL = import.meta.env.VITE_API_URL;
@@ -142,46 +143,64 @@ function LoginPage() {
         }
     };
 
+    // REDIRECT IF LOGGED IN
+    useEffect(() => {
+        // If user is already authenticated, redirect to profile page
+        if (isAuthenticated) {
+            navigate("/profile");
+        }
+    }, [isAuthenticated, navigate]);
+
     return (
         <div>
-            <h2>Login Page</h2>
 
             {loading && <p>Loading...</p>}
             {error && <div style={{ color: "red" }}>{error}</div>}
 
             {!loading && (
                 <>
-                {!(window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initData) && (
                     <form onSubmit={handleLogin}>
-                        <div>
-                            <label htmlFor="phone">Phone Number:</label>
-                            <input
-                                type="text"
-                                id="phone"
-                                value={phone}
-                                onChange={(e) => setPhone(e.target.value)}
-                                required
-                            />
-                        </div>
-                        <div>
-                            <label htmlFor="password">Password</label>
-                            <input
-                                type="password"
-                                id="password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                required
-                            />
-                        </div>
-                        <button type="submit">Login</button>
-                    </form>
+
+                        <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
+                            <div className="card-body">
+                {!(window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initData) && (
+                                <fieldset className="fieldset">
+                                    <label className="label">Phone</label>
+                                    <input
+                                        type="text"
+                                        className="input"
+                                        placeholder="Phone"
+                                        id="phone"
+                                        value={phone}
+                                        onChange={(e) => setPhone(e.target.value)}
+                                        required
+                                    />
+                                    <label className="label">Password</label>
+                                    <input
+                                        type="password"
+                                        className="input"
+                                        placeholder="Password"
+                                        id="password"
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
+                                        required
+                                    />
+                                    <div><a className="link link-hover">Forgot password?</a></div>
+                                    <button className="btn btn-neutral mt-4">Login</button>
+                                </fieldset>
                 )}
                 {!(window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initData) && (
                     <div>
-                        <p>or login with Telegram:</p>
-                        <div id="telegram-login-button"></div>
+                        <div className="divider">OR</div>
+                        <div
+                            id="telegram-login-button"
+                            className="grid grid-cols-3 place-content-center gap-2"
+                        ></div>
                     </div>
                 )}
+                            </div>
+                        </div>
+                    </form>
                 </>
             )}
 
