@@ -3,8 +3,8 @@ import axios from "axios";
 
 interface AuthState {
     isAuthenticated: boolean;
-    accessToken: string;
-    refreshToken: string;
+    accessToken: string | null;
+    refreshToken: string | null;
 }
 
 interface AuthContextType extends AuthState {

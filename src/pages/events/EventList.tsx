@@ -1,9 +1,10 @@
 // import React from "react";
+import EventList from "../../components/events/EventList.tsx";
 
-function EventList() {
+function EventListPage() {
     return (
-        <div>EVENTS</div>
+        <EventList />
     )
 }
 
-export default EventList;
+export default EventListPage;

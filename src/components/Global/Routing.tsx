@@ -2,11 +2,12 @@
 import {Route, Routes} from "react-router-dom";
 import HomePage from "../../pages/Home.tsx";
 import LoginPage from "../../pages/Login.tsx";
-import EventList from "../../pages/events/EventList.tsx";
 import PrivateRoute from "../PrivateRoute.tsx";
 import ProfilePage from "../../pages/profile/Profile.tsx";
 import SettingsPage from "../../pages/profile/Settings.tsx";
 import NotFoundPage from "../../pages/NotFound.tsx";
+import EventListPage from "../../pages/events/EventList.tsx";
+import EventDetailPage from "../../pages/events/EventDetail.tsx";
 
 function Routing() {
     return (
@@ -14,21 +15,13 @@ function Routing() {
             {/* PUBLIC */}
             <Route path="/" element={<HomePage />} />
             <Route path="/login" element={<LoginPage />} />
-            <Route path="/events" element={<EventList />} />
 
             {/* PRIVATE */}
-            <Route
-                path="/profile"
-                element={
-                    <PrivateRoute element={<ProfilePage />} />
-                }
-            />
-            <Route
-                path="/settings"
-                element={
-                    <PrivateRoute element={<SettingsPage />} />
-                }
-            />
+            <Route path="/profile" element={<PrivateRoute element={<ProfilePage />} />} />
+            <Route path="/settings" element={<PrivateRoute element={<SettingsPage />} />} />
+
+            <Route path="/events" element={<PrivateRoute element={<EventListPage />} />} />
+            <Route path="/events/:id" element={<PrivateRoute element={<EventDetailPage />} />} />
 
             {/* Catch all 404 */}
             <Route path="*" element={<NotFoundPage />} />
