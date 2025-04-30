@@ -59,6 +59,11 @@ function App() {
                             Events
                         </Link>
                     </li>
+                    <li>
+                        <Link to="/courses" onClick={closeDrawer}>
+                            Courses
+                        </Link>
+                    </li>
                 </ul>
             </div>
         </div>
