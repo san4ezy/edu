@@ -96,8 +96,11 @@ function EventList() {
                                 </figure>
                                 <div className="card-body">
                                     <h2 className="card-title">{event.name}</h2>
-                                    <p>{event.description}</p>
+                                    {event.description && <p className="text-justify">{event.description}</p>}
                                     <div className="card-actions justify-end">
+                                        <Link to={`/events/${event.id}`} className="btn btn-accent">
+                                            Dive in
+                                        </Link>
                                         <Link to={`/events/${event.id}`} className="btn btn-primary">
                                             I wish it
                                         </Link>
