@@ -1,5 +1,5 @@
 // import React from "react";
-import EventList from "../../components/events/EventList.tsx";
+import EventList from "../../components/Events/EventList.tsx";
 
 function EventListPage() {
     return (

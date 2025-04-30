@@ -32,7 +32,7 @@ function EventList() {
                 previous: response.pagination.previous,
             });
         } catch (error) {
-            console.error("Failed to fetch events:", error);
+            console.error("Failed to fetch Events:", error);
             setEvents([]);
         } finally {
             setLoading(false);
@@ -80,62 +80,52 @@ function EventList() {
                 <>
                     {!events || events.length === 0 ? (
                         <div className="text-center py-8">
-                            <p className="text-gray-500">No events found</p>
+                            <p className="text-gray-500">There are no events yet.</p>
+                            <p className="text-gray-500">Ask your favorite influencer to provide a link for Event you interested in.</p>
                         </div>
                     ) : (
-                        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                            {events.map((event) => (
-                                <div key={event.id} className="card bg-base-100 shadow-xl">
-                                    <div className="card-body">
-                                        <h2 className="card-title">{event.name}</h2>
-                                        {event.description && (
-                                            <p className="line-clamp-3">{event.description}</p>
-                                        )}
-                                        {event.website && (
-                                            <a 
-                                                href={event.website} 
-                                                target="_blank" 
-                                                rel="noopener noreferrer"
-                                                className="link link-primary"
-                                            >
-                                                Visit Website
-                                            </a>
-                                        )}
-                                        {event.contacts && (
-                                            <p className="text-sm text-gray-500">
-                                                Contact: {event.contacts}
-                                            </p>
-                                        )}
-                                        <div className="card-actions justify-end mt-4">
-                                            <Link to={`/events/${event.id}`} className="btn btn-primary">
-                                                View Details
-                                            </Link>
-                                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center">
+                        {events.map((event) => (
+                            <div key={event.id} className="card bg-base-100 image-full w-96 shadow-sm">
+                                {/* Set a photo as background if defined, else set bg color */}
+                                <figure>
+                                    <img
+                                        src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
+                                        alt="Shoes" />
+                                </figure>
+                                <div className="card-body">
+                                    <h2 className="card-title">{event.name}</h2>
+                                    <p>{event.description}</p>
+                                    <div className="card-actions justify-end">
+                                        <Link to={`/events/${event.id}`} className="btn btn-primary">
+                                            I wish it
+                                        </Link>
                                     </div>
                                 </div>
-                            ))}
+                            </div>
+                        ))}
                         </div>
+
                     )}
 
                     {events && events.length > 0 && (
                         <div className="flex justify-center gap-2 mt-8">
-                            <button
-                                className="btn btn-sm"
-                                disabled={!pagination.previous}
-                                onClick={() => handlePageChange(page - 1)}
-                            >
-                                Previous
-                            </button>
-                            <span className="self-center px-2">
-                                Page {page} of {Math.ceil(pagination.count / limit)}
-                            </span>
-                            <button
-                                className="btn btn-sm"
-                                disabled={!pagination.next}
-                                onClick={() => handlePageChange(page + 1)}
-                            >
-                                Next
-                            </button>
+                            <div className="join">
+                                <button
+                                    className="join-item btn"
+                                    disabled={!pagination.previous}
+                                    onClick={() => handlePageChange(page - 1)}
+                                >«</button>
+                                <button className="join-item btn">
+                                    {page} of {Math.ceil(pagination.count / limit)}
+                                </button>
+                                <button
+                                    className="join-item btn"
+                                    disabled={!pagination.next}
+                                    onClick={() => handlePageChange(page + 1)}
+                                >»</button>
+                            </div>
                         </div>
                     )}
                 </>
