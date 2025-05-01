@@ -5,6 +5,9 @@ export interface Event {
     website: string | null;
     contacts: string | null;
     team_id: string; // UUID format
+    date: string; // ISO date string
+    image: string | null;
+    location: string | null;
 }
 
 export interface ApiResponse<T> {

@@ -29,9 +29,9 @@ function App() {
                 {/* Page content here */}
                 <div className="flex flex-col min-h-screen">
                     <Header />
-                    <main className="container mx-auto p-4 flex-grow flex flex-col md:flex-row">
+                    <main className="flex-grow">
                         {/* Content */}
-                        <section className="flex-1 bg-base-100 p-4 rounded-box w-full md:w-auto">
+                        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 w-full">
                             <Routing />
                         </section>
                     </main>
