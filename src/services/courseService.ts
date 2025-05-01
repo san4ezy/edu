@@ -1,17 +1,21 @@
-import { Course, CourseListResponse } from "../types/Course";
-import api from "./api";
+import { Course, CourseListResponse } from '../types/Course';
+import api from './api';
 
 interface CourseParams {
     search?: string;
-    ordering?: string;
     limit?: number;
     offset?: number;
 }
 
 export const courseService = {
-    getCourses: async (params: CourseParams = {}): Promise<CourseListResponse> => {
-        const response = await api.get<CourseListResponse>('/courses/', { params });
-        return response.data;
+    getCourses: async (params?: CourseParams): Promise<CourseListResponse> => {
+        try {
+            const response = await api.get<CourseListResponse>('/courses/', { params });
+            return response.data;
+        } catch (error) {
+            console.error('Error fetching courses:', error);
+            throw error;
+        }
     },
 
     getCourse: async (id: string): Promise<Course> => {
