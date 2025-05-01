@@ -128,7 +128,7 @@ function LoginPage() {
 
         try {
             const response = await loginWithPhonePassword(phone, password);
-            const { access, refresh } = response.data["data"];
+            const { access, refresh } = response.data;
             login({access, refresh});
             navigate("/profile");
         } catch (err) {
@@ -152,58 +152,73 @@ function LoginPage() {
     }, [isAuthenticated, navigate]);
 
     return (
-        <div>
-
-            {loading && <p>Loading...</p>}
-            {error && <div style={{ color: "red" }}>{error}</div>}
-
-            {!loading && (
-                <>
-                    <form onSubmit={handleLogin}>
-
-                        <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
-                            <div className="card-body">
-                {!(window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initData) && (
-                                <fieldset className="fieldset">
-                                    <label className="label">Phone</label>
-                                    <input
-                                        type="text"
-                                        className="input"
-                                        placeholder="Phone"
-                                        id="phone"
-                                        value={phone}
-                                        onChange={(e) => setPhone(e.target.value)}
-                                        required
-                                    />
-                                    <label className="label">Password</label>
-                                    <input
-                                        type="password"
-                                        className="input"
-                                        placeholder="Password"
-                                        id="password"
-                                        value={password}
-                                        onChange={(e) => setPassword(e.target.value)}
-                                        required
-                                    />
-                                    <div><a className="link link-hover">Forgot password?</a></div>
-                                    <button className="btn btn-neutral mt-4">Login</button>
-                                </fieldset>
-                )}
-                {!(window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initData) && (
-                    <div>
-                        <div className="divider">OR</div>
-                        <div
-                            id="telegram-login-button"
-                            className="grid grid-cols-3 place-content-center gap-2"
-                        ></div>
+        <div 
+            className="min-h-screen flex items-start pt-8 lg:pt-16 relative"
+            style={{
+                backgroundImage: 'url("https://images.unsplash.com/photo-1483401757487-2ced3fa77952?q=80&w=2073&auto=format&fit=crop")',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat'
+            }}
+        >
+            <div className="absolute inset-0 bg-black/50"></div>
+            <div className="max-w-5xl w-full mx-auto px-4 relative">
+                <div className="flex flex-col lg:flex-row-reverse gap-8">
+                    <div className="text-center lg:text-left lg:w-1/2 text-white">
+                        <h1 className="text-5xl font-bold">Login now!</h1>
+                        <p className="py-6">
+                            Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda excepturi exercitationem
+                            quasi. In deleniti eaque aut repudiandae et a id nisi.
+                        </p>
                     </div>
-                )}
-                            </div>
-                        </div>
-                    </form>
-                </>
-            )}
+                    <div className="card bg-base-100 w-full lg:w-1/2 max-w-sm shrink-0 shadow-2xl mx-auto backdrop-blur-sm bg-white/90">
+                        <div className="card-body">
+                            {loading && <p>Loading...</p>}
+                            {error && <div style={{ color: "red" }}>{error}</div>}
 
+                            {!loading && (
+                                <form onSubmit={handleLogin}>
+                                    {!(window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initData) && (
+                                        <fieldset className="fieldset">
+                                            <label className="label">Phone</label>
+                                            <input
+                                                type="text"
+                                                className="input input-bordered w-full"
+                                                placeholder="Phone"
+                                                id="phone"
+                                                value={phone}
+                                                onChange={(e) => setPhone(e.target.value)}
+                                                required
+                                            />
+                                            <label className="label">Password</label>
+                                            <input
+                                                type="password"
+                                                className="input input-bordered w-full"
+                                                placeholder="Password"
+                                                id="password"
+                                                value={password}
+                                                onChange={(e) => setPassword(e.target.value)}
+                                                required
+                                            />
+                                            <div><a className="link link-hover">Forgot password?</a></div>
+                                            <button className="btn btn-neutral w-full mt-4">Login</button>
+                                        </fieldset>
+                                    )}
+                                    {!(window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initData) && (
+                                        <div>
+                                            <div className="divider">OR</div>
+                                            <div
+                                                id="telegram-login-button"
+                                                className="grid grid-cols-3 place-content-center gap-2"
+                                            ></div>
+                                        </div>
+                                    )}
+                                </form>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     );
 }
