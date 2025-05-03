@@ -27,6 +27,7 @@ function LoginPage() {
     const { login } = useAuth();
     const [loading, setLoading] = useState(false);
     const { isAuthenticated, logout } = useAuth();
+    const redirectToAfterLogin: string = "/courses";
 
     // TODO: need to move it
     // const API_URL = import.meta.env.VITE_API_URL;
@@ -42,7 +43,7 @@ function LoginPage() {
             const response = await loginWithTelegramMiniApp(initData);
             const { access, refresh } = response.data;
             login({ access, refresh });
-            navigate("/profile");
+            navigate(redirectToAfterLogin);
         } catch (err) {
             console.error("Telegram Mini App authentication failed:", err);
             if (axios.isAxiosError(err) && err.response) {
@@ -63,7 +64,7 @@ function LoginPage() {
             const response = await loginWithTelegramWidget(user);
             const { access, refresh } = response.data;
             login({ access, refresh });
-            navigate("/profile");
+            navigate(redirectToAfterLogin);
         } catch (err) {
             console.error("Telegram Widget authentication failed:", err);
             if (axios.isAxiosError(err) && err.response) {
@@ -130,7 +131,7 @@ function LoginPage() {
             const response = await loginWithPhonePassword(phone, password);
             const { access, refresh } = response.data;
             login({access, refresh});
-            navigate("/profile");
+            navigate(redirectToAfterLogin);
         } catch (err) {
             console.error("Login failed:", err);
             if (axios.isAxiosError(err) && err.response) {
@@ -147,7 +148,7 @@ function LoginPage() {
     useEffect(() => {
         // If user is already authenticated, redirect to profile page
         if (isAuthenticated) {
-            navigate("/profile");
+            navigate(redirectToAfterLogin);
         }
     }, [isAuthenticated, navigate]);
 
