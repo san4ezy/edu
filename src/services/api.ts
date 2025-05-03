@@ -98,6 +98,7 @@ api.interceptors.response.use(
                 if (response.data.access) {
                     // Store the new tokens
                     localStorage.setItem('accessToken', response.data.access);
+                    localStorage.setItem('refreshToken', response.data.refresh);
 
                     // Update auth header for the original request
                     originalRequest.headers!['Authorization'] = `Bearer ${response.data.access}`;

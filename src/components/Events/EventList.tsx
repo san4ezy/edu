@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { Event } from "../../types/Event";
+import EventCard from './EventCard';
 import eventService from "../../services/eventService";
 
 function EventList() {
@@ -84,32 +84,11 @@ function EventList() {
                             <p className="text-gray-500">Ask your favorite influencer to provide a link for Event you interested in.</p>
                         </div>
                     ) : (
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center">
-                        {events.map((event) => (
-                            <div key={event.id} className="card bg-base-100 image-full w-96 shadow-sm">
-                                {/* Set a photo as background if defined, else set bg color */}
-                                <figure>
-                                    <img
-                                        src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
-                                        alt="Shoes" />
-                                </figure>
-                                <div className="card-body">
-                                    <h2 className="card-title">{event.name}</h2>
-                                    {event.description && <p className="text-justify">{event.description}</p>}
-                                    <div className="card-actions justify-end">
-                                        <Link to={`/events/${event.id}`} className="btn btn-accent">
-                                            Dive in
-                                        </Link>
-                                        <Link to={`/events/${event.id}`} className="btn btn-primary">
-                                            I wish it
-                                        </Link>
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {events.map((event) => (
+                                <EventCard key={event.id} event={event} />
+                            ))}
                         </div>
-
                     )}
 
                     {events && events.length > 0 && (

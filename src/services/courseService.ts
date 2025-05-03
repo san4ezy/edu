@@ -1,4 +1,4 @@
-import { Course, CourseListResponse } from '../types/Course';
+import { PaidCourse, UserCourseListResponse } from '../types/Course';
 import api from './api';
 
 interface CourseParams {
@@ -8,9 +8,9 @@ interface CourseParams {
 }
 
 export const courseService = {
-    getCourses: async (params?: CourseParams): Promise<CourseListResponse> => {
+    getCourses: async (params?: CourseParams): Promise<UserCourseListResponse> => {
         try {
-            const response = await api.get<CourseListResponse>('/courses/', { params });
+            const response = await api.get<UserCourseListResponse>('/user-courses/', { params });
             return response.data;
         } catch (error) {
             console.error('Error fetching courses:', error);
@@ -18,15 +18,15 @@ export const courseService = {
         }
     },
 
-    getCourse: async (id: string): Promise<Course> => {
-        const response = await api.get<{ data: Course }>(`/courses/${id}/`);
-        return response.data.data;
+    getCourse: async (id: string): Promise<PaidCourse> => {
+        try {
+            const response = await api.get(`/user-courses/${id}/`);
+            return response.data.data;
+        } catch (error) {
+            throw error;
+        }
     },
 
-    createCourse: async (courseData: Omit<Course, 'id'>): Promise<Course> => {
-        const response = await api.post<{ data: Course }>('/courses/', courseData);
-        return response.data.data;
-    }
 };
 
 export default courseService;

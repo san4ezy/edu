@@ -109,13 +109,15 @@ function EventDetail() {
             </div>
 
             <div className="card bg-base-100 shadow-xl rounded-none sm:rounded-xl overflow-hidden">
-                <figure className="w-full h-64 sm:h-96 lg:h-[32rem]">
-                    <img
-                        src={event.image || "https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"}
-                        alt={event.name}
-                        className="object-cover w-full h-full"
-                    />
-                </figure>
+                {event.image && (
+                    <figure className="w-full h-64 sm:h-96 lg:h-[32rem]">
+                        <img
+                            src={event.image}
+                            alt={event.name}
+                            className="object-cover w-full h-full"
+                        />
+                    </figure>
+                )}
                 <div className="card-body p-4 sm:p-6 lg:p-8">
                     <div className="flex flex-col gap-6">
                         <h1 className="card-title text-2xl sm:text-3xl">{event.name}</h1>

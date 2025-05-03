@@ -1,6 +1,7 @@
 export interface Event {
     id: string; // UUID format
     name: string;
+    short_description: string | null;
     description: string | null;
     website: string | null;
     contacts: string | null;

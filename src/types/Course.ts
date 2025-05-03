@@ -19,7 +19,33 @@ export interface Course {
     lessons: Lesson[];
 }
 
-export interface CourseListResponse {
+export interface Plan {
+    id: string;
+    name: string;
+    description: string;
+    price: string;
+}
+
+export enum PaidLessonStatus {
+    NEW = 'NEW',
+    VIEWED = 'VIEWED',
+    PASSED = 'PASSED'
+}
+
+export interface PaidLesson {
+    id: string;
+    lesson: Lesson;
+    status: PaidLessonStatus;
+}
+
+export interface PaidCourse {
+    id: string;
+    course: Course;
+    plan: Plan;
+    lessons: PaidLesson[];
+}
+
+export interface UserCourseListResponse {
     success: boolean;
     status_code: number;
     pagination: {
@@ -28,6 +54,6 @@ export interface CourseListResponse {
         previous: string | null;
     };
     errors: string[];
-    data: Course[];
+    data: PaidCourse[];
     service_data: any;
 }

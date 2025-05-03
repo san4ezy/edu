@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Course } from "../../types/Course";
+import { PaidCourse } from "../../types/Course";
 import courseService from "../../services/courseService";
 import CourseCard from './CourseCard';
 
 const CourseList: React.FC = () => {
     const [loading, setLoading] = useState(true);
-    const [courses, setCourses] = useState<Course[]>([]);
+    const [courses, setCourses] = useState<PaidCourse[]>([]);
     const [pagination, setPagination] = useState({
         count: 0,
         next: null as string | null,
