@@ -1,11 +1,4 @@
-export interface Lesson {
-    id: string;
-    name: string;
-    short_description: string;
-    description: string | null;
-    start_dt: string;
-    end_dt: string;
-}
+import {Lesson, PaidLesson} from "./Lesson.ts";
 
 export interface Course {
     id: string;
@@ -26,18 +19,6 @@ export interface Plan {
     price: string;
 }
 
-export enum PaidLessonStatus {
-    NEW = 'NEW',
-    VIEWED = 'VIEWED',
-    PASSED = 'PASSED'
-}
-
-export interface PaidLesson {
-    id: string;
-    lesson: Lesson;
-    status: PaidLessonStatus;
-}
-
 export interface PaidCourse {
     id: string;
     course: Course;
@@ -45,7 +26,7 @@ export interface PaidCourse {
     lessons: PaidLesson[];
 }
 
-export interface UserCourseListResponse {
+export interface PaidCourseListResponse {
     success: boolean;
     status_code: number;
     pagination: {

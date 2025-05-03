@@ -19,7 +19,7 @@ function EventList() {
         try {
             setLoading(true);
             const offset = (pageNum - 1) * limit;
-            const response = await eventService.getEvents({
+            const response = await eventService.list({
                 search: searchTerm,
                 limit,
                 offset,

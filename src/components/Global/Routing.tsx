@@ -10,6 +10,7 @@ import EventListPage from "../../pages/events/EventList.tsx";
 import EventDetailPage from "../../pages/events/EventDetail.tsx";
 import CourseListPage from "../../pages/courses/CourseList.tsx";
 import CourseDetailPage from "../../pages/courses/CourseDetail.tsx";
+import LessonDetailPage from "../../pages/courses/LessonDetail.tsx";
 
 function Routing() {
     return (
@@ -27,6 +28,8 @@ function Routing() {
 
             <Route path="/courses" element={<PrivateRoute element={<CourseListPage />} />} />
             <Route path="/courses/:id" element={<PrivateRoute element={<CourseDetailPage />} />} />
+
+            <Route path="/lessons/:id" element={<PrivateRoute element={<LessonDetailPage />} />} />
 
             {/* Catch all 404 */}
             <Route path="*" element={<NotFoundPage />} />

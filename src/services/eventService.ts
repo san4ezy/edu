@@ -9,12 +9,12 @@ interface EventsParams {
 }
 
 export const eventService = {
-    getEvents: async (params: EventsParams = {}): Promise<EventListResponse> => {
+    list: async (params: EventsParams = {}): Promise<EventListResponse> => {
         const response = await api.get<EventListResponse>('/events/', { params });
         return response.data;
     },
 
-    getEvent: async (id: string): Promise<Event> => {
+    retrieve: async (id: string): Promise<Event> => {
         const response = await api.get<{ data: Event }>(`/events/${id}/`);
         return response.data.data;
     },

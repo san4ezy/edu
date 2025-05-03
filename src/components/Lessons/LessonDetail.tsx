@@ -1,34 +1,33 @@
 import { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
-import courseService from "../../services/courseService";
-import { PaidCourse } from "../../types/Course";
-import LessonCard from "../Lessons/LessonCard.tsx";
+import lessonService from "../../services/lessonService.ts";
+import { PaidLesson } from "../../types/Lesson.ts";
 
-function CourseDetail() {
+function LessonDetail() {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
-    const [course, setCourse] = useState<PaidCourse | null>(null);
+    const [lesson, setLesson] = useState<PaidLesson | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        const fetchCourseDetails = async () => {
+        const fetchDetails = async () => {
             if (!id) return;
 
             try {
                 setLoading(true);
-                const data = await courseService.retrieve(id);
-                setCourse(data);
+                const data = await lessonService.retrieve(id);
+                setLesson(data);
                 setError(null);
             } catch (err) {
-                console.error("Failed to fetch course details:", err);
-                setError("Failed to load course details. The course may not exist or there was a network issue.");
+                console.error("Failed to fetch lesson details:", err);
+                setError("Failed to load lesson details. The lesson may not exist or there was a network issue.");
             } finally {
                 setLoading(false);
             }
         };
 
-        fetchCourseDetails();
+        fetchDetails();
     }, [id]);
 
     if (loading) {
@@ -58,59 +57,61 @@ function CourseDetail() {
         );
     }
 
-    if (!course) {
+    if (!lesson) {
         return (
             <div className="container mx-auto p-4 text-center">
-                <p>Course not found</p>
-                <Link to="/courses" className="btn btn-primary mt-4">Back to Courses</Link>
+                <p>Lesson not found</p>
+                <Link to="/lessons" className="btn btn-primary mt-4">Back to Lessons</Link>
             </div>
         );
     }
 
+    const getStatusClass = (status: string) => {
+        switch (status) {
+            case "NEW":
+                return "neutral";
+            case "VIEWED":
+                return "warning";
+            case "PASSED":
+                return "warning";
+            default:
+                return "neutral";
+        }
+    };
+
     return (
         <div className="w-full">
             <div className="mb-6 px-4 sm:px-0">
-                <Link to="/courses" className="btn btn-outline btn-sm">
-                    ← Back to Courses
-                </Link>
+                <button
+                    onClick={() => navigate(-1)}
+                    className="btn btn-outline btn-sm"
+                >
+                    ← Back to Course
+                </button>
             </div>
 
             <div className="card bg-base-100 shadow-xl rounded-none sm:rounded-xl overflow-hidden">
-                {course.course.image && (
-                    <figure className="w-full h-64 sm:h-96 lg:h-[32rem]">
-                        <img
-                            src={course.course.image}
-                            alt={course.course.name}
-                            className="object-cover w-full h-full"
-                        />
-                    </figure>
-                )}
                 <div className="card-body p-4 sm:p-6 lg:p-8">
                     <div className="flex flex-col gap-6">
-                        <h1 className="card-title text-2xl sm:text-3xl">{course.course.name}</h1>
+                        <h1 className="card-title text-2xl sm:text-3xl">{lesson.lesson.name}</h1>
 
-                        {/* Course Details Section */}
+                        {/* Lesson Details Section */}
                         <div className="space-y-4">
                             <div className="flex items-center gap-2 text-sm">
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                 </svg>
-                                <span>{new Date(course.course.start_dt).toLocaleDateString()}</span>
+                                <span>{new Date(lesson.lesson.start_dt).toLocaleDateString()}</span>
+                                <div className={`badge badge-soft badge-${getStatusClass(lesson.status)}`}>{lesson.status.toLowerCase()}</div>
                             </div>
 
                             <div className="prose max-w-none">
-                                <p className="text-justify">{course.course.description}</p>
+                                <p className="text-justify">{lesson.lesson.description}</p>
                             </div>
-                        </div>
 
-                        {/* Lessons Section */}
-                        <div className="space-y-4">
-                            <h2 className="text-3xl font-bold">Lessons</h2>
-                            <ul className="steps steps-vertical w-full mt-4">
-                                {course.lessons.map((lesson) => (
-                                    <LessonCard lesson={lesson} />
-                                ))}
-                            </ul>
+                            <div className="prose max-w-none">
+                                <p className="text-justify">{lesson.lesson.content}</p>
+                            </div>
                         </div>
 
                     </div>
@@ -120,4 +121,4 @@ function CourseDetail() {
     );
 }
 
-export default CourseDetail;
+export default LessonDetail;

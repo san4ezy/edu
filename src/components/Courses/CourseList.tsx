@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { PaidCourse } from "../../types/Course";
 import courseService from "../../services/courseService";
 import CourseCard from './CourseCard';
@@ -21,7 +20,7 @@ const CourseList: React.FC = () => {
         try {
             setLoading(true);
             const offset = (pageNum - 1) * limit;
-            const response = await courseService.getCourses({
+            const response = await courseService.list({
                 search: searchTerm,
                 limit,
                 offset,

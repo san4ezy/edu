@@ -1,6 +1,7 @@
 import React from 'react';
 import { formatDistanceToNow, isPast } from 'date-fns';
-import { PaidLesson } from "../../types/Course";
+import {PaidLesson} from "../../types/Lesson.ts";
+import {Link} from "react-router-dom";
 
 interface PaidLessonCardProps {
     lesson: PaidLesson;
@@ -13,12 +14,12 @@ const LessonCard: React.FC<PaidLessonCardProps> = ({ lesson }) => {
     const displayDate = isStarted ? endDate : startDate;
     const dateLabel = isStarted ? 'Ends' : 'Starts';
     const statusClass = lesson.status === 'NEW' ? '' :
-                              lesson.status === 'VIEWED' ? 'step-warning' :
-                              lesson.status === 'PASSED' ? 'step-success' :
-                              'step-neutral';
+                              lesson.status === 'VIEWED' ? 'warning' :
+                              lesson.status === 'PASSED' ? 'success' :
+                              'neutral';
 
     return (
-        <li className={"step " + statusClass}>
+        <li className={`step step-${statusClass}`} key={lesson.id}>
 
             <div className="card">
                 <h3 className="card-title text-xl">{lesson.lesson.name}</h3>
@@ -45,6 +46,11 @@ const LessonCard: React.FC<PaidLessonCardProps> = ({ lesson }) => {
                             {dateLabel} {formatDistanceToNow(displayDate, { addSuffix: true })}
                         </span>
                     </div>
+                </div>
+                <div className="card-actions justify-end mt-4">
+                    <Link to={`/lessons/${lesson.id}`} className={`btn ${isStarted ? "btn-accent" : "btn-disabled"}`}>
+                        Open
+                    </Link>
                 </div>
             </div>
 

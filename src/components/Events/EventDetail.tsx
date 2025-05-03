@@ -16,7 +16,7 @@ function EventDetail() {
 
             try {
                 setLoading(true);
-                const data = await eventService.getEvent(id);
+                const data = await eventService.retrieve(id);
                 setEvent(data);
                 setError(null);
             } catch (err) {
