@@ -1,8 +1,8 @@
 import { useRef } from 'react';
 import './App.css';
-import Footer from './components/Global/Footer.tsx';
-import Header from './components/Global/Header.tsx';
-import Routing from './components/Global/Routing.tsx';
+import Footer from './components/Layout/Footer.tsx';
+import Header from './components/Layout/Header.tsx';
+import Routing from './components/Layout/Routing.tsx';
 import { Link } from 'react-router-dom';
 
 function App() {
