@@ -3,6 +3,8 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import courseService from "../../services/courseService.ts";
 import LessonCard from "../Lessons/LessonCard.tsx";
 import {PaidCourse} from "../../types/Event.ts";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faCalendar, faExclamation} from "@fortawesome/free-solid-svg-icons";
 
 function CourseDetail() {
     const { id } = useParams<{ id: string }>();
@@ -43,9 +45,7 @@ function CourseDetail() {
         return (
             <div className="container mx-auto p-4 text-center">
                 <div className="alert alert-error max-w-md mx-auto">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
+                    <FontAwesomeIcon icon={faExclamation} className="h-6 w-6" />
                     <span>{error}</span>
                 </div>
                 <button
@@ -73,6 +73,9 @@ function CourseDetail() {
                 <Link to="/courses" className="btn btn-outline btn-sm">
                     ← Back to Courses
                 </Link>
+                <Link to="/courses" className="btn btn-outline btn-sm">
+                     Edit
+                </Link>
             </div>
 
             <div className="card bg-base-100 shadow-xl rounded-none sm:rounded-xl overflow-hidden">
@@ -92,9 +95,7 @@ function CourseDetail() {
                         {/* Course Details Section */}
                         <div className="space-y-4">
                             <div className="flex items-center gap-2 text-sm">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                </svg>
+                                <FontAwesomeIcon icon={faCalendar} className="h-5 w-5" />
                                 <span>{new Date(course.start_dt).toLocaleDateString()}</span>
                             </div>
 

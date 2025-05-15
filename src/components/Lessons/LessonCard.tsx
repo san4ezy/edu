@@ -2,6 +2,8 @@ import React from 'react';
 import { formatDistanceToNow, isPast } from 'date-fns';
 import {Link} from "react-router-dom";
 import {PaidLesson} from "../../types/Event.ts";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faCalendar} from "@fortawesome/free-solid-svg-icons";
 
 interface PaidLessonCardProps {
     lesson: PaidLesson;
@@ -27,21 +29,7 @@ const LessonCard: React.FC<PaidLessonCardProps> = ({ lesson }) => {
                     <span>{new Date(lesson.start_dt).toLocaleDateString()}</span>
                     {lesson.short_description}
                     <div className="flex items-center gap-2">
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-5 w-5 text-gray-400"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                        >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                            />
-                        </svg>
-                        {/*<FontAwesomeIcon icon={faCalendar} className="h-5 w-5 text-gray-400" />*/}
+                        <FontAwesomeIcon icon={faCalendar} className="h-5 w-5 text-gray-400" />
                         <span>
                             {dateLabel} {formatDistanceToNow(displayDate, { addSuffix: true })}
                         </span>

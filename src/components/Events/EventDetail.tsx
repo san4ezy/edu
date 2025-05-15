@@ -3,6 +3,13 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import eventService from "../../services/eventService";
 import { Event } from "../../types/Event.ts";
 import PlanCard from "./PlanCard.tsx";
+import {
+    faAddressCard,
+    faCalendar, faClock,
+    faExclamation,
+    faMoneyBill
+} from "@fortawesome/free-solid-svg-icons";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 function EventDetail() {
     const { id } = useParams<{ id: string }>();
@@ -101,9 +108,7 @@ function EventDetail() {
         return (
             <div className="container mx-auto p-4 text-center">
                 <div className="alert alert-error max-w-md mx-auto">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
+                    <FontAwesomeIcon icon={faExclamation} className="h-6 w-6" />
                     <span>{error}</span>
                 </div>
                 <button
@@ -150,9 +155,7 @@ function EventDetail() {
                         {/* Event Details Section */}
                         <div className="space-y-4">
                             <div className="flex items-center gap-2 text-sm">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                </svg>
+                                <FontAwesomeIcon icon={faCalendar} className="h-6 w-6" />
                                 <span>{new Date(event.start_dt).toLocaleDateString()}</span>
                             </div>
 
@@ -164,9 +167,7 @@ function EventDetail() {
                         {/* Pricing Section */}
                         <div className="space-y-4">
                             <h2 className="text-xl font-semibold flex items-center gap-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
+                                <FontAwesomeIcon icon={faMoneyBill} className="h-6 w-6" />
                                 Pricing Plans
                             </h2>
                             <div className="flex flex-col sm:flex-row gap-4 overflow-x-auto py-4 px-0 sm:px-4">
@@ -179,9 +180,7 @@ function EventDetail() {
                         {/* Time Remaining Section */}
                         <div className="space-y-4">
                             <h2 className="text-xl font-semibold flex items-center gap-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
+                                <FontAwesomeIcon icon={faClock} className="h-6 w-6" />
                                 Time Remaining
                             </h2>
                             <div className="grid grid-flow-col gap-2 sm:gap-3 text-center auto-cols-max justify-center">
@@ -212,15 +211,11 @@ function EventDetail() {
                         {event.contacts && (
                             <div className="space-y-4">
                                 <h2 className="text-xl font-semibold flex items-center gap-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                                    </svg>
+                                    <FontAwesomeIcon icon={faAddressCard} className="h-6 w-6" />
                                     Contact Information
                                 </h2>
                                 <div className="alert alert-info shadow-lg mt-4">
-                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg>
+                                    <FontAwesomeIcon icon={faAddressCard} className="h-6 w-6" />
                                     <div>
                                         <div className="text-sm">{event.contacts}</div>
                                     </div>
