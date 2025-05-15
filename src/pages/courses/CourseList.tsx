@@ -1,5 +1,5 @@
 // import React from "react";
-import CourseList from "../../components/Courses/CourseList.tsx";
+import CourseList from "../../components/Events/CourseList.tsx";
 
 function CourseListPage() {
     return (

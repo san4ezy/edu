@@ -1,17 +1,17 @@
 import React from 'react';
 import { formatDistanceToNow, isPast } from 'date-fns';
-import { PaidCourse } from '../../types/Course';
 import { Link } from "react-router-dom";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCalendar } from '@fortawesome/free-solid-svg-icons';
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+// import { faCalendar } from '@fortawesome/free-solid-svg-icons';
+import {PaidCourse} from "../../types/Event.ts";
 
 interface CourseCardProps {
     course: PaidCourse;
 }
 
 const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
-    const startDate = new Date(course.course.start_dt);
-    const endDate = new Date(course.course.end_dt);
+    const startDate = new Date(course.start_dt);
+    const endDate = new Date(course.end_dt);
     const isStarted = isPast(startDate);
     const displayDate = isStarted ? endDate : startDate;
     const dateLabel = isStarted ? 'Ends' : 'Starts';
@@ -19,10 +19,10 @@ const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
     return (
         <div key={course.id} className="card w-full bg-base-100 shadow-xl">
             <figure className="relative h-48">
-                {course.course.image ? (
+                {course.image ? (
                     <img
-                        src={course.course.image}
-                        alt={course.course.name}
+                        src={course.image}
+                        alt={course.name}
                         className="w-full h-full object-cover"
                     />
                 ) : (
@@ -32,9 +32,9 @@ const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
                 )}
             </figure>
             <div className="card-body">
-                <h2 className="card-title">{course.course.name}</h2>
-                {course.course.short_description && (
-                    <p className="text-gray-600 text-justify line-clamp-3">{course.course.short_description}</p>
+                <h2 className="card-title">{course.name}</h2>
+                {course.short_description && (
+                    <p className="text-gray-600 text-justify line-clamp-3">{course.short_description}</p>
                 )}
                 <br/>
                 <div className="flex justify-between items-center text-sm text-gray-500">

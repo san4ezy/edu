@@ -1,4 +1,4 @@
-import { Event, EventListResponse } from "../types/Event";
+import {BuyEventResponse, Event, EventListResponse} from "../types/Event";
 import api from "./api";
 
 interface EventsParams {
@@ -19,9 +19,16 @@ export const eventService = {
         return response.data.data;
     },
 
-    createEvent: async (eventData: Omit<Event, 'id'>): Promise<Event> => {
+    create: async (eventData: Omit<Event, 'id'>): Promise<Event> => {
         const response = await api.post<{ data: Event }>('/events/', eventData);
         return response.data.data;
+    },
+
+    buy: async (eventId: string, planId: string): Promise<BuyEventResponse> => {
+        const response = await api.post<BuyEventResponse>(`/events/${eventId}/buy/`, {
+            plan_id: planId
+        });
+        return response.data;
     }
 };
 

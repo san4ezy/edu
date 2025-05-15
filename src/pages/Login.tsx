@@ -29,8 +29,6 @@ function LoginPage() {
     const { isAuthenticated, logout } = useAuth();
     const redirectToAfterLogin: string = "/courses";
 
-    // TODO: need to move it
-    // const API_URL = import.meta.env.VITE_API_URL;
     const BOT_USERNAME = import.meta.env.VITE_BOT_USERNAME;
 
     // TG AUTH /////////////////////////////////////////////////////////////////////////

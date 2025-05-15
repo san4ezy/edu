@@ -1,5 +1,5 @@
-import { PaidCourse, PaidCourseListResponse } from '../types/Course';
 import api from './api';
+import {PaidCourse, PaidCourseListResponse} from "../types/Event.ts";
 
 interface CourseParams {
     search?: string;

@@ -1,15 +1,15 @@
 import React from 'react';
 import { formatDistanceToNow, isPast } from 'date-fns';
-import {PaidLesson} from "../../types/Lesson.ts";
 import {Link} from "react-router-dom";
+import {PaidLesson} from "../../types/Event.ts";
 
 interface PaidLessonCardProps {
     lesson: PaidLesson;
 }
 
 const LessonCard: React.FC<PaidLessonCardProps> = ({ lesson }) => {
-    const startDate = new Date(lesson.lesson.start_dt);
-    const endDate = new Date(lesson.lesson.end_dt);
+    const startDate = new Date(lesson.start_dt);
+    const endDate = new Date(lesson.end_dt);
     const isStarted = isPast(startDate);
     const displayDate = isStarted ? endDate : startDate;
     const dateLabel = isStarted ? 'Ends' : 'Starts';
@@ -22,10 +22,10 @@ const LessonCard: React.FC<PaidLessonCardProps> = ({ lesson }) => {
         <li className={`step step-${statusClass}`} key={lesson.id}>
 
             <div className="card">
-                <h3 className="card-title text-xl">{lesson.lesson.name}</h3>
+                <h3 className="card-title text-xl mt-8">{lesson.name}</h3>
                 <div className="card-body text-justify p-4 sm:p-6 lg:p-8">
-                    <span>{new Date(lesson.lesson.start_dt).toLocaleDateString()}</span>
-                    {lesson.lesson.short_description}
+                    <span>{new Date(lesson.start_dt).toLocaleDateString()}</span>
+                    {lesson.short_description}
                     <div className="flex items-center gap-2">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -47,10 +47,16 @@ const LessonCard: React.FC<PaidLessonCardProps> = ({ lesson }) => {
                         </span>
                     </div>
                 </div>
-                <div className="card-actions justify-end mt-4">
-                    <Link to={`/lessons/${lesson.id}`} className={`btn ${isStarted ? "btn-accent" : "btn-disabled"}`}>
+                <div className="card-actions flex-col items-stretch gap-2">
+                    <Link
+                        to={`/lessons/${lesson.id}`}
+                        className={`btn w-full ${!lesson.is_paid ? "btn-disabled" : isStarted ? "btn-accent" : "btn-disabled"}`}
+                    >
                         Open
                     </Link>
+                    {!lesson.is_paid && (
+                        <span className="text-sm text-red-500 text-center">Not included in your plan</span>
+                    )}
                 </div>
             </div>
 

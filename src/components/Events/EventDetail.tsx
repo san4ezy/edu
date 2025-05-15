@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import eventService from "../../services/eventService";
-import { Event } from "../../types/Event";
+import { Event } from "../../types/Event.ts";
+import PlanCard from "./PlanCard.tsx";
 
 function EventDetail() {
     const { id } = useParams<{ id: string }>();
@@ -9,6 +10,7 @@ function EventDetail() {
     const [event, setEvent] = useState<Event | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [buying, setBuying] = useState(false);
 
     useEffect(() => {
         const fetchEventDetails = async () => {
@@ -37,10 +39,14 @@ function EventDetail() {
         seconds: 0,
     });
 
-    // Set your target date here (e.g., event.date if available)
     useEffect(() => {
-        // Replace with your event date or a fixed date for testing
-        const target = event?.date ? new Date(event.date) : new Date(Date.now() + 5 * 24 * 60 * 60 * 1000);
+        if (!event) return;
+
+        const target = new Date(event.start_dt);
+        if (isNaN(target.getTime())) {
+            console.warn("Invalid start_dt:", event.start_dt);
+            return;
+        }
 
         const tick = () => {
             const now = new Date();
@@ -62,7 +68,26 @@ function EventDetail() {
         tick();
         const timer = setInterval(tick, 1000);
         return () => clearInterval(timer);
-    }, [event?.date]);
+    }, [event]);
+
+    const handleBuyPlan = async (planId: string) => {
+        if (!event?.id || buying) return;
+
+        try {
+            setBuying(true);
+            await eventService.buy(event.id, planId);
+            // Show success message
+            alert('Successfully purchased the plan!');
+            // Optionally redirect to user's courses or refresh the page
+            navigate('/courses');
+        } catch (error) {
+            console.error('Failed to purchase plan:', error);
+            // Show error message
+            alert('Failed to purchase the plan. Please try again.');
+        } finally {
+            setBuying(false);
+        }
+    };
 
     if (loading) {
         return (
@@ -128,7 +153,7 @@ function EventDetail() {
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                 </svg>
-                                <span>{new Date(event.date).toLocaleDateString()}</span>
+                                <span>{new Date(event.start_dt).toLocaleDateString()}</span>
                             </div>
 
                             <div className="prose max-w-none">
@@ -145,109 +170,9 @@ function EventDetail() {
                                 Pricing Plans
                             </h2>
                             <div className="flex flex-col sm:flex-row gap-4 overflow-x-auto py-4 px-0 sm:px-4">
-                                <div className="card w-full sm:w-64 bg-base-100 shadow-sm flex-shrink-0">
-                                    <div className="card-body">
-                                        <div className="flex justify-between">
-                                            <h2 className="text-3xl font-bold">Beginner</h2>
-                                            <span className="text-xl">₴499</span>
-                                        </div>
-                                        <ul className="mt-6 flex flex-col gap-2 text-xs">
-                                            <li>
-                                                <svg xmlns="http://www.w3.org/2000/svg" className="size-4 me-2 inline-block text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>
-                                                <span>High-resolution image generation</span>
-                                            </li>
-                                            <li>
-                                                <svg xmlns="http://www.w3.org/2000/svg" className="size-4 me-2 inline-block text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>
-                                                <span>Customizable style templates</span>
-                                            </li>
-                                            <li>
-                                                <svg xmlns="http://www.w3.org/2000/svg" className="size-4 me-2 inline-block text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>
-                                                <span>Batch processing capabilities</span>
-                                            </li>
-                                        </ul>
-                                        <div className="mt-6">
-                                            <button className="btn btn-warning btn-block">Buy</button>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="card w-full sm:w-64 bg-base-100 shadow-sm flex-shrink-0">
-                                    <div className="card-body">
-                                        <span className="badge badge-xs badge-warning">Most Popular</span>
-                                        <div className="flex justify-between">
-                                            <h2 className="text-3xl font-bold">Efficient</h2>
-                                            <span className="text-xl">₴1299</span>
-                                        </div>
-                                        <ul className="mt-6 flex flex-col gap-2 text-xs">
-                                            <li>
-                                                <svg xmlns="http://www.w3.org/2000/svg" className="size-4 me-2 inline-block text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>
-                                                <span>Everything from Beginner</span>
-                                            </li>
-                                            <li>
-                                                <svg xmlns="http://www.w3.org/2000/svg" className="size-4 me-2 inline-block text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>
-                                                <span>Customizable style templates</span>
-                                            </li>
-                                            <li>
-                                                <svg xmlns="http://www.w3.org/2000/svg" className="size-4 me-2 inline-block text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>
-                                                <span>Batch processing capabilities</span>
-                                            </li>
-                                            <li>
-                                                <svg xmlns="http://www.w3.org/2000/svg" className="size-4 me-2 inline-block text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>
-                                                <span>AI-driven image enhancements</span>
-                                            </li>
-                                            <li className="opacity-50">
-                                                <svg xmlns="http://www.w3.org/2000/svg" className="size-4 me-2 inline-block text-base-content/50" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>
-                                                <span className="line-through">Seamless cloud integration</span>
-                                            </li>
-                                            <li className="opacity-50">
-                                                <svg xmlns="http://www.w3.org/2000/svg" className="size-4 me-2 inline-block text-base-content/50" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>
-                                                <span className="line-through">Real-time collaboration tools</span>
-                                            </li>
-                                        </ul>
-                                        <div className="mt-6">
-                                            <button className="btn btn-warning btn-block">Buy</button>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="card w-full sm:w-64 bg-base-100 shadow-sm flex-shrink-0">
-                                    <div className="card-body">
-                                        <span className="badge badge-xs badge-accent">Individual touch</span>
-                                        <div className="flex justify-between">
-                                            <h2 className="text-3xl font-bold">Premium</h2>
-                                            <span className="text-xl">₴4444</span>
-                                        </div>
-                                        <ul className="mt-6 flex flex-col gap-2 text-xs">
-                                            <li>
-                                                <svg xmlns="http://www.w3.org/2000/svg" className="size-4 me-2 inline-block text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>
-                                                <span>Everything from Efficient</span>
-                                            </li>
-                                            <li>
-                                                <svg xmlns="http://www.w3.org/2000/svg" className="size-4 me-2 inline-block text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>
-                                                <span>Customizable style templates</span>
-                                            </li>
-                                            <li>
-                                                <svg xmlns="http://www.w3.org/2000/svg" className="size-4 me-2 inline-block text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>
-                                                <span>Batch processing capabilities</span>
-                                            </li>
-                                            <li>
-                                                <svg xmlns="http://www.w3.org/2000/svg" className="size-4 me-2 inline-block text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>
-                                                <span>AI-driven image enhancements</span>
-                                            </li>
-                                            <li>
-                                                <svg xmlns="http://www.w3.org/2000/svg" className="size-4 me-2 inline-block text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>
-                                                <span>Seamless cloud integration</span>
-                                            </li>
-                                            <li>
-                                                <svg xmlns="http://www.w3.org/2000/svg" className="size-4 me-2 inline-block text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>
-                                                <span>Individual consultation with the Influencer</span>
-                                            </li>
-                                        </ul>
-                                        <div className="mt-6">
-                                            <button className="btn btn-warning btn-block">Buy</button>
-                                        </div>
-                                    </div>
-                                </div>
+                                {event.plans.map((plan) => (
+                                    <PlanCard key={plan.id} plan={plan} onBuy={handleBuyPlan} />
+                                ))}
                             </div>
                         </div>
 

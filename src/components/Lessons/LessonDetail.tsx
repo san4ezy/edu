@@ -21,7 +21,7 @@ function LessonDetail() {
                 setError(null);
             } catch (err) {
                 console.error("Failed to fetch lesson details:", err);
-                setError("Failed to load lesson details. The lesson may not exist or there was a network issue.");
+                setError("Failed to load lesson details. You should buy it first.");
             } finally {
                 setLoading(false);
             }

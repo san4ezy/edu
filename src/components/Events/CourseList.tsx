@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { PaidCourse } from "../../types/Course";
-import courseService from "../../services/courseService";
-import CourseCard from './CourseCard';
+import courseService from "../../services/courseService.ts";
+import CourseCard from './CourseCard.tsx';
 
 const CourseList: React.FC = () => {
     const [loading, setLoading] = useState(true);

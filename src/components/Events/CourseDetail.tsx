@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
-import courseService from "../../services/courseService";
-import { PaidCourse } from "../../types/Course";
+import courseService from "../../services/courseService.ts";
 import LessonCard from "../Lessons/LessonCard.tsx";
+import {PaidCourse} from "../../types/Event.ts";
 
 function CourseDetail() {
     const { id } = useParams<{ id: string }>();
@@ -76,18 +76,18 @@ function CourseDetail() {
             </div>
 
             <div className="card bg-base-100 shadow-xl rounded-none sm:rounded-xl overflow-hidden">
-                {course.course.image && (
+                {course.image && (
                     <figure className="w-full h-64 sm:h-96 lg:h-[32rem]">
                         <img
-                            src={course.course.image}
-                            alt={course.course.name}
+                            src={course.image}
+                            alt={course.name}
                             className="object-cover w-full h-full"
                         />
                     </figure>
                 )}
                 <div className="card-body p-4 sm:p-6 lg:p-8">
                     <div className="flex flex-col gap-6">
-                        <h1 className="card-title text-2xl sm:text-3xl">{course.course.name}</h1>
+                        <h1 className="card-title text-2xl sm:text-3xl">{course.name}</h1>
 
                         {/* Course Details Section */}
                         <div className="space-y-4">
@@ -95,11 +95,11 @@ function CourseDetail() {
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                 </svg>
-                                <span>{new Date(course.course.start_dt).toLocaleDateString()}</span>
+                                <span>{new Date(course.start_dt).toLocaleDateString()}</span>
                             </div>
 
                             <div className="prose max-w-none">
-                                <p className="text-justify">{course.course.description}</p>
+                                <p className="text-justify">{course.description}</p>
                             </div>
                         </div>
 
@@ -108,7 +108,7 @@ function CourseDetail() {
                             <h2 className="text-3xl font-bold">Lessons</h2>
                             <ul className="steps steps-vertical w-full mt-4">
                                 {course.lessons.map((lesson) => (
-                                    <LessonCard lesson={lesson} />
+                                    <LessonCard key={lesson.id} lesson={lesson} />
                                 ))}
                             </ul>
                         </div>
