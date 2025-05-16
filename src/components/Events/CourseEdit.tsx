@@ -6,7 +6,7 @@ import {PaidCourse} from "../../types/Event.ts";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCalendar, faExclamation} from "@fortawesome/free-solid-svg-icons";
 
-function CourseDetail() {
+function CourseEdit() {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const [course, setCourse] = useState<PaidCourse | null>(null);
@@ -71,10 +71,10 @@ function CourseDetail() {
         <div className="w-full">
             <div className="mb-6 px-4 sm:px-0">
                 <Link to="/courses" className="btn btn-outline btn-sm">
-                    ← Back to Courses
+                    ← Back
                 </Link>
-                <Link to={`/courses/${course.id}/edit`} className="btn btn-outline btn-sm">
-                     Edit
+                <Link to="/courses" className="btn btn-outline btn-sm">
+                    Save
                 </Link>
             </div>
 
@@ -121,4 +121,4 @@ function CourseDetail() {
     );
 }
 
-export default CourseDetail;
+export default CourseEdit;
