@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { PaidCourse } from "../../types/Course";
+import { PaidCourse } from "../../types/User.ts";
 import courseService from "../../services/courseService.ts";
 import CourseCard from './CourseCard.tsx';
 

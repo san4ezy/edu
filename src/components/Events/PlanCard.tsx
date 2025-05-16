@@ -1,5 +1,5 @@
 import React from "react";
-import {Plan} from "../../types/Course.ts";
+import {Plan} from "../../types/User.ts";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCheck} from "@fortawesome/free-solid-svg-icons";
 

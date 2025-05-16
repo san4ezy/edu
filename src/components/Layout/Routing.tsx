@@ -3,6 +3,7 @@ import {Route, Routes} from "react-router-dom";
 import HomePage from "../../pages/Home.tsx";
 import LoginPage from "../../pages/Login.tsx";
 import PrivateRoute from "../PrivateRoute.tsx";
+import ManagerRoute from "../ManagerRoute.tsx";
 import ProfilePage from "../../pages/profile/Profile.tsx";
 import SettingsPage from "../../pages/profile/Settings.tsx";
 import NotFoundPage from "../../pages/NotFound.tsx";
@@ -26,14 +27,14 @@ function Routing() {
 
             <Route path="/events" element={<PrivateRoute element={<EventListPage />} />} />
             <Route path="/events/:id" element={<PrivateRoute element={<EventDetailPage />} />} />
-            {/*<Route path="/events/:id/edit" element={<PrivateRoute element={<EventEditPage />} />} />*/}
+            {/*<Route path="/events/:id/edit" element={<ManagerRoute element={<EventEditPage />} />} />*/}
 
             <Route path="/courses" element={<PrivateRoute element={<CourseListPage />} />} />
             <Route path="/courses/:id" element={<PrivateRoute element={<CourseDetailPage />} />} />
-            <Route path="/courses/:id/edit" element={<PrivateRoute element={<CourseEditPage />} />} />
+            <Route path="/courses/:id/edit" element={<ManagerRoute element={<CourseEditPage />} />} />
 
             <Route path="/lessons/:id" element={<PrivateRoute element={<LessonDetailPage />} />} />
-            {/*<Route path="/lessons/:id/edit" element={<PrivateRoute element={<LessonEditPage />} />} />*/}
+            {/*<Route path="/lessons/:id/edit" element={<ManagerRoute element={<LessonEditPage />} />} />*/}
 
             {/* Catch all 404 */}
             <Route path="*" element={<NotFoundPage />} />
