@@ -14,6 +14,7 @@ import CourseDetailPage from "../../pages/courses/CourseDetail.tsx";
 import LessonDetailPage from "../../pages/lessons/LessonDetail.tsx";
 import CourseEditPage from "../../pages/courses/CourseEdit.tsx";
 import LessonEditPage from "../../pages/lessons/LessonEdit.tsx";
+import EventEditPage from "../../pages/events/EventEdit.tsx";
 
 function Routing() {
     return (
@@ -28,7 +29,7 @@ function Routing() {
 
             <Route path="/events" element={<PrivateRoute element={<EventListPage />} />} />
             <Route path="/events/:id" element={<PrivateRoute element={<EventDetailPage />} />} />
-            {/*<Route path="/events/:id/edit" element={<ManagerRoute element={<EventEditPage />} />} />*/}
+            <Route path="/events/:id/edit" element={<ManagerRoute element={<EventEditPage />} />} />
 
             <Route path="/courses" element={<PrivateRoute element={<CourseListPage />} />} />
             <Route path="/courses/:id" element={<PrivateRoute element={<CourseDetailPage />} />} />

@@ -5,15 +5,17 @@ import { Event } from "../../types/Event.ts";
 import PlanCard from "./PlanCard.tsx";
 import {
     faAddressCard,
-    faCalendar, faClock,
+    faCalendar, faClock, faEdit,
     faExclamation,
     faMoneyBill
 } from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {useAuth} from "../../context/AuthContext.tsx";
 
 function EventDetail() {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
+    const { isManager } = useAuth();
     const [event, setEvent] = useState<Event | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -136,6 +138,11 @@ function EventDetail() {
                 <Link to="/events" className="btn btn-outline btn-sm">
                     ← Back to Events
                 </Link>
+                {isManager && (
+                    <Link to={`/events/${event.id}/edit`} className="btn btn-outline btn-warning btn-sm ml-2">
+                        <FontAwesomeIcon icon={faEdit} className="h-5 w-5" />
+                    </Link>
+                )}
             </div>
 
             <div className="card bg-base-100 shadow-xl rounded-none sm:rounded-xl overflow-hidden">
