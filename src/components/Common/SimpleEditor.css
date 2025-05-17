@@ -1,0 +1,88 @@
+/* SimpleEditor styles */
+.simple-editor [contenteditable=true] {
+  min-height: 10rem;
+}
+
+.simple-editor [contenteditable=true] h1 {
+  font-size: 1.875rem;
+  font-weight: 700;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.simple-editor [contenteditable=true] h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.simple-editor [contenteditable=true] h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.simple-editor [contenteditable=true] p {
+  margin-bottom: 0.75rem;
+}
+
+.simple-editor [contenteditable=true] ul, 
+.simple-editor [contenteditable=true] ol {
+  margin-left: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.simple-editor [contenteditable=true] ul {
+  list-style-type: disc;
+}
+
+.simple-editor [contenteditable=true] ol {
+  list-style-type: decimal;
+}
+
+.simple-editor [contenteditable=true] li {
+  margin-bottom: 0.25rem;
+}
+
+.simple-editor [contenteditable=true] blockquote {
+  border-left: 3px solid #ccc;
+  margin-left: 0;
+  margin-right: 0;
+  padding-left: 1rem;
+  color: #555;
+  font-style: italic;
+}
+
+.simple-editor [contenteditable=true] a {
+  color: #3b82f6;
+  text-decoration: underline;
+}
+
+.simple-editor [contenteditable=true] pre {
+  background-color: #f1f1f1;
+  border-radius: 0.25rem;
+  padding: 0.75rem;
+  font-family: monospace;
+  white-space: pre-wrap;
+  margin-bottom: 0.75rem;
+}
+
+/* Toolbar styling */
+.simple-editor .toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.simple-editor .toolbar button:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* Placeholder styling */
+.simple-editor [contenteditable=true]:empty:before {
+  content: attr(data-placeholder);
+  color: #9ca3af;
+  font-style: italic;
+}
