@@ -12,7 +12,7 @@ import EventDetailPage from "../../pages/events/EventDetail.tsx";
 import CourseListPage from "../../pages/courses/CourseList.tsx";
 import CourseDetailPage from "../../pages/courses/CourseDetail.tsx";
 import LessonDetailPage from "../../pages/lessons/LessonDetail.tsx";
-import CourseEditPage from "../../pages/events/EventEdit.tsx";
+import CourseEditPage from "../../pages/courses/CourseEdit.tsx";
 import LessonEditPage from "../../pages/lessons/LessonEdit.tsx";
 
 function Routing() {
