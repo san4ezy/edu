@@ -42,6 +42,7 @@ const LessonCard: React.FC<PaidLessonCardProps> = ({ lesson }) => {
                     >
                         Open
                     </Link>
+
                     {!lesson.is_paid && (
                         <span className="text-sm text-red-500 text-center">Not included in your plan</span>
                     )}
