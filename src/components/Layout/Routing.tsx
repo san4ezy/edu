@@ -11,8 +11,9 @@ import EventListPage from "../../pages/events/EventList.tsx";
 import EventDetailPage from "../../pages/events/EventDetail.tsx";
 import CourseListPage from "../../pages/courses/CourseList.tsx";
 import CourseDetailPage from "../../pages/courses/CourseDetail.tsx";
-import LessonDetailPage from "../../pages/courses/LessonDetail.tsx";
-import CourseEditPage from "../../pages/courses/EventEdit.tsx";
+import LessonDetailPage from "../../pages/lessons/LessonDetail.tsx";
+import CourseEditPage from "../../pages/events/EventEdit.tsx";
+import LessonEditPage from "../../pages/lessons/LessonEdit.tsx";
 
 function Routing() {
     return (
@@ -34,7 +35,7 @@ function Routing() {
             <Route path="/courses/:id/edit" element={<ManagerRoute element={<CourseEditPage />} />} />
 
             <Route path="/lessons/:id" element={<PrivateRoute element={<LessonDetailPage />} />} />
-            {/*<Route path="/lessons/:id/edit" element={<ManagerRoute element={<LessonEditPage />} />} />*/}
+            <Route path="/lessons/:id/edit" element={<ManagerRoute element={<LessonEditPage />} />} />
 
             {/* Catch all 404 */}
             <Route path="*" element={<NotFoundPage />} />

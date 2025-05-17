@@ -3,7 +3,8 @@ import { formatDistanceToNow, isPast } from 'date-fns';
 import {Link} from "react-router-dom";
 import {PaidLesson} from "../../types/Event.ts";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCalendar} from "@fortawesome/free-solid-svg-icons";
+import {faCalendar, faEdit, faPlus} from "@fortawesome/free-solid-svg-icons";
+import {useAuth} from "../../context/AuthContext.tsx";
 
 interface PaidLessonCardProps {
     lesson: PaidLesson;
@@ -12,6 +13,7 @@ interface PaidLessonCardProps {
 const LessonCard: React.FC<PaidLessonCardProps> = ({ lesson }) => {
     const startDate = new Date(lesson.start_dt);
     const endDate = new Date(lesson.end_dt);
+    const { isManager } = useAuth();
     const isStarted = isPast(startDate);
     const displayDate = isStarted ? endDate : startDate;
     const dateLabel = isStarted ? 'Ends' : 'Starts';
@@ -42,6 +44,12 @@ const LessonCard: React.FC<PaidLessonCardProps> = ({ lesson }) => {
                     >
                         Open
                     </Link>
+                    {isManager && (
+                        <Link to={`/lessons/${lesson.id}/edit`} className="btn btn-outline btn-warning">
+                            <FontAwesomeIcon icon={faEdit} className="h-5 w-5" />
+                            Edit lesson
+                        </Link>
+                    )}
 
                     {!lesson.is_paid && (
                         <span className="text-sm text-red-500 text-center">Not included in your plan</span>

@@ -1,14 +1,21 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 import courseService from "../../services/courseService.ts";
 import LessonCard from "../Lessons/LessonCard.tsx";
 import {PaidCourse} from "../../types/Event.ts";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCalendar, faExclamation} from "@fortawesome/free-solid-svg-icons";
+import {
+    faCalendar,
+    faEdit,
+    faExclamation,
+    faPlus
+} from "@fortawesome/free-solid-svg-icons";
 
 function CourseDetail() {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
+    const { isManager } = useAuth();
     const [course, setCourse] = useState<PaidCourse | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -73,9 +80,11 @@ function CourseDetail() {
                 <Link to="/courses" className="btn btn-outline btn-sm">
                     ← Back to Courses
                 </Link>
-                <Link to={`/courses/${course.id}/edit`} className="btn btn-outline btn-sm">
-                     Edit
-                </Link>
+                {isManager && (
+                    <Link to={`/courses/${course.id}/edit`} className="btn btn-outline btn-warning btn-sm ml-2">
+                        <FontAwesomeIcon icon={faEdit} className="h-5 w-5" />
+                    </Link>
+                )}
             </div>
 
             <div className="card bg-base-100 shadow-xl rounded-none sm:rounded-xl overflow-hidden">
@@ -106,7 +115,14 @@ function CourseDetail() {
 
                         {/* Lessons Section */}
                         <div className="space-y-4">
-                            <h2 className="text-3xl font-bold">Lessons</h2>
+                            <h2 className="text-3xl font-bold">
+                                Lessons
+                                {isManager && (
+                                    <Link to={`/courses/${course.id}/edit`} className="btn btn-outline btn-warning btn-sm ml-2">
+                                        <FontAwesomeIcon icon={faPlus} className="h-5 w-5" />
+                                    </Link>
+                                )}
+                            </h2>
                             <ul className="steps steps-vertical w-full mt-4">
                                 {course.lessons.map((lesson) => (
                                     <LessonCard key={lesson.id} lesson={lesson} />
