@@ -15,6 +15,7 @@ import LessonDetailPage from "../../pages/lessons/LessonDetail.tsx";
 import CourseEditPage from "../../pages/courses/CourseEdit.tsx";
 import LessonEditPage from "../../pages/lessons/LessonEdit.tsx";
 import EventEditPage from "../../pages/events/EventEdit.tsx";
+import PlanEditPage from "../../pages/plans/PlanEdit.tsx";
 
 function Routing() {
     return (
@@ -34,9 +35,12 @@ function Routing() {
             <Route path="/courses" element={<PrivateRoute element={<CourseListPage />} />} />
             <Route path="/courses/:id" element={<PrivateRoute element={<CourseDetailPage />} />} />
             <Route path="/courses/:id/edit" element={<ManagerRoute element={<CourseEditPage />} />} />
+            <Route path="/courses/:courseId/plans/add" element={<ManagerRoute element={<PlanEditPage />} />} />
+            <Route path="/courses/:courseId/plans/:planId/edit" element={<ManagerRoute element={<PlanEditPage />} />} />
 
             <Route path="/lessons/:id" element={<PrivateRoute element={<LessonDetailPage />} />} />
             <Route path="/lessons/:id/edit" element={<ManagerRoute element={<LessonEditPage />} />} />
+            <Route path="/courses/:courseId/lessons/add" element={<ManagerRoute element={<LessonEditPage />} />} />
 
             {/* Catch all 404 */}
             <Route path="*" element={<NotFoundPage />} />

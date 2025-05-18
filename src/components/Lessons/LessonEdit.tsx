@@ -4,13 +4,13 @@ import lessonService from "../../services/lessonService.ts";
 import { Lesson } from "../../types/Event.ts";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendar, faExclamation, faSave } from "@fortawesome/free-solid-svg-icons";
-import SimpleEditor from "../common/SimpleEditor.tsx";
+import SimpleEditor from "../Common/SimpleEditor.tsx";
 
 function LessonEdit() {
     const { id, courseId } = useParams<{ id: string; courseId: string }>();
     const navigate = useNavigate();
     const location = useLocation();
-    const isNewLesson = location.pathname.includes("/new");
+    const isNewLesson = location.pathname.includes("/new") || location.pathname.includes("/add");
     
     const [lesson, setLesson] = useState<Lesson | null>(null);
     const [formData, setFormData] = useState<Partial<Lesson>>({});
@@ -142,8 +142,9 @@ function LessonEdit() {
         );
     }
 
-    // Back link should go to the lesson detail page if editing an existing lesson
-    const backUrl = id ? `/lessons/${id}` : `/courses/${courseId}`;
+    // Back link should go to the lesson detail page if editing an existing lesson, 
+    // or to the course detail page if creating a new lesson from a course
+    const backUrl = `/courses/${courseId}`;
 
     return (
         <div className="w-full">

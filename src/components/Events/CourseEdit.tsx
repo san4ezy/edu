@@ -1,16 +1,16 @@
 import { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import courseService from "../../services/courseService.ts";
-import { PaidCourse, PaidLesson } from "../../types/Event.ts";
+import { PaidCourse, Course, PaidLesson } from "../../types/Event.ts";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendar, faExclamation, faSave, faUpload, faTrash } from "@fortawesome/free-solid-svg-icons";
-import SimpleEditor from "../common/SimpleEditor.tsx";
+import SimpleEditor from "../Common/SimpleEditor.tsx";
 
 function CourseEdit() {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
-    const [course, setCourse] = useState<PaidCourse | null>(null);
-    const [formData, setFormData] = useState<Partial<PaidCourse>>({});
+    const [course, setCourse] = useState<Course | null>(null);
+    const [formData, setFormData] = useState<Partial<Course>>({});
     const [imageFile, setImageFile] = useState<File | null>(null);
     const [imagePreview, setImagePreview] = useState<string | null>(null);
     const [removeImage, setRemoveImage] = useState(false);

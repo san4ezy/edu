@@ -98,124 +98,6 @@ paths:
       tags:
       - auth
     parameters: []
-  /courses/:
-    get:
-      operationId: courses_list
-      description: ''
-      parameters:
-      - name: search
-        in: query
-        description: A search term.
-        required: false
-        type: string
-      - name: ordering
-        in: query
-        description: Which field to use when ordering the results.
-        required: false
-        type: string
-      - name: limit
-        in: query
-        description: Number of results to return per page.
-        required: false
-        type: integer
-      - name: offset
-        in: query
-        description: The initial index from which to return the results.
-        required: false
-        type: integer
-      responses:
-        '200':
-          description: ''
-          schema:
-            required:
-            - count
-            - results
-            type: object
-            properties:
-              count:
-                type: integer
-              next:
-                type: string
-                format: uri
-                x-nullable: true
-              previous:
-                type: string
-                format: uri
-                x-nullable: true
-              results:
-                type: array
-                items:
-                  $ref: '#/definitions/Course'
-      tags:
-      - courses
-    post:
-      operationId: courses_create
-      description: ''
-      parameters:
-      - name: data
-        in: body
-        required: true
-        schema:
-          $ref: '#/definitions/Course'
-      responses:
-        '201':
-          description: ''
-          schema:
-            $ref: '#/definitions/Course'
-      tags:
-      - courses
-    parameters: []
-  /courses/{id}/:
-    get:
-      operationId: courses_read
-      description: ''
-      parameters: []
-      responses:
-        '200':
-          description: ''
-          schema:
-            $ref: '#/definitions/Course'
-      tags:
-      - courses
-    put:
-      operationId: courses_update
-      description: ''
-      parameters:
-      - name: data
-        in: body
-        required: true
-        schema:
-          $ref: '#/definitions/Course'
-      responses:
-        '200':
-          description: ''
-          schema:
-            $ref: '#/definitions/Course'
-      tags:
-      - courses
-    patch:
-      operationId: courses_partial_update
-      description: ''
-      parameters:
-      - name: data
-        in: body
-        required: true
-        schema:
-          $ref: '#/definitions/Course'
-      responses:
-        '200':
-          description: ''
-          schema:
-            $ref: '#/definitions/Course'
-      tags:
-      - courses
-    parameters:
-    - name: id
-      in: path
-      description: A UUID string identifying this course.
-      required: true
-      type: string
-      format: uuid
   /events/:
     get:
       operationId: events_list
@@ -355,6 +237,521 @@ paths:
     - name: id
       in: path
       description: A UUID string identifying this event.
+      required: true
+      type: string
+      format: uuid
+  /management-courses/:
+    get:
+      operationId: management-courses_list
+      description: ''
+      parameters:
+      - name: search
+        in: query
+        description: A search term.
+        required: false
+        type: string
+      - name: ordering
+        in: query
+        description: Which field to use when ordering the results.
+        required: false
+        type: string
+      - name: limit
+        in: query
+        description: Number of results to return per page.
+        required: false
+        type: integer
+      - name: offset
+        in: query
+        description: The initial index from which to return the results.
+        required: false
+        type: integer
+      responses:
+        '200':
+          description: ''
+          schema:
+            required:
+            - count
+            - results
+            type: object
+            properties:
+              count:
+                type: integer
+              next:
+                type: string
+                format: uri
+                x-nullable: true
+              previous:
+                type: string
+                format: uri
+                x-nullable: true
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/Course'
+      tags:
+      - management-courses
+    post:
+      operationId: management-courses_create
+      description: ''
+      parameters:
+      - name: data
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/Course'
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/Course'
+      tags:
+      - management-courses
+    parameters: []
+  /management-courses/{course_pk}/lessons/:
+    get:
+      operationId: management-courses_lessons_list
+      description: ''
+      parameters:
+      - name: search
+        in: query
+        description: A search term.
+        required: false
+        type: string
+      - name: ordering
+        in: query
+        description: Which field to use when ordering the results.
+        required: false
+        type: string
+      - name: limit
+        in: query
+        description: Number of results to return per page.
+        required: false
+        type: integer
+      - name: offset
+        in: query
+        description: The initial index from which to return the results.
+        required: false
+        type: integer
+      responses:
+        '200':
+          description: ''
+          schema:
+            required:
+            - count
+            - results
+            type: object
+            properties:
+              count:
+                type: integer
+              next:
+                type: string
+                format: uri
+                x-nullable: true
+              previous:
+                type: string
+                format: uri
+                x-nullable: true
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/LessonManagement'
+      tags:
+      - management-courses
+    post:
+      operationId: management-courses_lessons_create
+      description: ''
+      parameters:
+      - name: data
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/LessonManagement'
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/LessonManagement'
+      tags:
+      - management-courses
+    parameters:
+    - name: course_pk
+      in: path
+      required: true
+      type: string
+  /management-courses/{course_pk}/lessons/{id}/:
+    get:
+      operationId: management-courses_lessons_read
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/LessonManagement'
+      tags:
+      - management-courses
+    put:
+      operationId: management-courses_lessons_update
+      description: ''
+      parameters:
+      - name: data
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/LessonManagement'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/LessonManagement'
+      tags:
+      - management-courses
+    patch:
+      operationId: management-courses_lessons_partial_update
+      description: ''
+      parameters:
+      - name: data
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/LessonManagement'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/LessonManagement'
+      tags:
+      - management-courses
+    delete:
+      operationId: management-courses_lessons_delete
+      description: ''
+      parameters: []
+      responses:
+        '204':
+          description: ''
+      tags:
+      - management-courses
+    parameters:
+    - name: course_pk
+      in: path
+      required: true
+      type: string
+    - name: id
+      in: path
+      description: A UUID string identifying this lesson.
+      required: true
+      type: string
+      format: uuid
+  /management-courses/{course_pk}/plans/:
+    get:
+      operationId: management-courses_plans_list
+      description: ''
+      parameters:
+      - name: search
+        in: query
+        description: A search term.
+        required: false
+        type: string
+      - name: ordering
+        in: query
+        description: Which field to use when ordering the results.
+        required: false
+        type: string
+      - name: limit
+        in: query
+        description: Number of results to return per page.
+        required: false
+        type: integer
+      - name: offset
+        in: query
+        description: The initial index from which to return the results.
+        required: false
+        type: integer
+      responses:
+        '200':
+          description: ''
+          schema:
+            required:
+            - count
+            - results
+            type: object
+            properties:
+              count:
+                type: integer
+              next:
+                type: string
+                format: uri
+                x-nullable: true
+              previous:
+                type: string
+                format: uri
+                x-nullable: true
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/PlanManagement'
+      tags:
+      - management-courses
+    post:
+      operationId: management-courses_plans_create
+      description: ''
+      parameters:
+      - name: data
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/PlanManagement'
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/PlanManagement'
+      tags:
+      - management-courses
+    parameters:
+    - name: course_pk
+      in: path
+      required: true
+      type: string
+  /management-courses/{course_pk}/plans/{id}/:
+    get:
+      operationId: management-courses_plans_read
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/PlanManagement'
+      tags:
+      - management-courses
+    put:
+      operationId: management-courses_plans_update
+      description: ''
+      parameters:
+      - name: data
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/PlanManagement'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/PlanManagement'
+      tags:
+      - management-courses
+    patch:
+      operationId: management-courses_plans_partial_update
+      description: ''
+      parameters:
+      - name: data
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/PlanManagement'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/PlanManagement'
+      tags:
+      - management-courses
+    delete:
+      operationId: management-courses_plans_delete
+      description: ''
+      parameters: []
+      responses:
+        '204':
+          description: ''
+      tags:
+      - management-courses
+    parameters:
+    - name: course_pk
+      in: path
+      required: true
+      type: string
+    - name: id
+      in: path
+      description: A UUID string identifying this plan.
+      required: true
+      type: string
+      format: uuid
+  /management-courses/{id}/:
+    get:
+      operationId: management-courses_read
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/Course'
+      tags:
+      - management-courses
+    put:
+      operationId: management-courses_update
+      description: ''
+      parameters:
+      - name: data
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/Course'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/Course'
+      tags:
+      - management-courses
+    patch:
+      operationId: management-courses_partial_update
+      description: ''
+      parameters:
+      - name: data
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/Course'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/Course'
+      tags:
+      - management-courses
+    parameters:
+    - name: id
+      in: path
+      description: A UUID string identifying this course.
+      required: true
+      type: string
+      format: uuid
+  /management-lessons/:
+    get:
+      operationId: management-lessons_list
+      description: ''
+      parameters:
+      - name: search
+        in: query
+        description: A search term.
+        required: false
+        type: string
+      - name: ordering
+        in: query
+        description: Which field to use when ordering the results.
+        required: false
+        type: string
+      - name: limit
+        in: query
+        description: Number of results to return per page.
+        required: false
+        type: integer
+      - name: offset
+        in: query
+        description: The initial index from which to return the results.
+        required: false
+        type: integer
+      responses:
+        '200':
+          description: ''
+          schema:
+            required:
+            - count
+            - results
+            type: object
+            properties:
+              count:
+                type: integer
+              next:
+                type: string
+                format: uri
+                x-nullable: true
+              previous:
+                type: string
+                format: uri
+                x-nullable: true
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/LessonManagement'
+      tags:
+      - management-lessons
+    post:
+      operationId: management-lessons_create
+      description: ''
+      parameters:
+      - name: data
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/LessonManagement'
+      responses:
+        '201':
+          description: ''
+          schema:
+            $ref: '#/definitions/LessonManagement'
+      tags:
+      - management-lessons
+    parameters: []
+  /management-lessons/{id}/:
+    get:
+      operationId: management-lessons_read
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/LessonManagement'
+      tags:
+      - management-lessons
+    put:
+      operationId: management-lessons_update
+      description: ''
+      parameters:
+      - name: data
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/LessonManagement'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/LessonManagement'
+      tags:
+      - management-lessons
+    patch:
+      operationId: management-lessons_partial_update
+      description: ''
+      parameters:
+      - name: data
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/LessonManagement'
+      responses:
+        '200':
+          description: ''
+          schema:
+            $ref: '#/definitions/LessonManagement'
+      tags:
+      - management-lessons
+    delete:
+      operationId: management-lessons_delete
+      description: ''
+      parameters: []
+      responses:
+        '204':
+          description: ''
+      tags:
+      - management-lessons
+    parameters:
+    - name: id
+      in: path
+      description: A UUID string identifying this lesson.
       required: true
       type: string
       format: uuid
@@ -753,6 +1150,93 @@ definitions:
         title: Token
         type: string
         minLength: 1
+  Plan:
+    required:
+    - name
+    type: object
+    properties:
+      id:
+        title: ID
+        type: string
+        format: uuid
+      name:
+        title: Name
+        type: string
+        maxLength: 128
+        minLength: 1
+      description:
+        title: Description
+        type: string
+        x-nullable: true
+      price:
+        title: Price
+        type: string
+        readOnly: true
+  Event:
+    required:
+    - name
+    type: object
+    properties:
+      id:
+        title: ID
+        type: string
+        format: uuid
+      name:
+        title: Name
+        type: string
+        maxLength: 128
+        minLength: 1
+      course:
+        title: Course
+        type: string
+        format: uuid
+        readOnly: true
+      short_description:
+        title: Short description
+        type: string
+        x-nullable: true
+      description:
+        title: Description
+        type: string
+        x-nullable: true
+      image:
+        title: Image
+        type: string
+        readOnly: true
+        x-nullable: true
+        format: uri
+      website:
+        title: Website
+        type: string
+        format: uri
+        maxLength: 200
+        x-nullable: true
+      contacts:
+        title: Contacts
+        type: string
+        x-nullable: true
+      plans:
+        type: array
+        items:
+          $ref: '#/definitions/Plan'
+        readOnly: true
+      start_dt:
+        title: Start dt
+        type: string
+        format: date-time
+      end_dt:
+        title: End dt
+        type: string
+        format: date-time
+  BuyEvent:
+    required:
+    - plan_id
+    type: object
+    properties:
+      plan_id:
+        title: Plan id
+        type: string
+        format: uuid
   LessonShort:
     required:
     - name
@@ -823,99 +1307,7 @@ definitions:
         type: array
         items:
           $ref: '#/definitions/LessonShort'
-  Plan:
-    required:
-    - name
-    type: object
-    properties:
-      id:
-        title: ID
-        type: string
-        format: uuid
-      name:
-        title: Name
-        type: string
-        maxLength: 128
-        minLength: 1
-      description:
-        title: Description
-        type: string
-        x-nullable: true
-      price:
-        title: Price
-        type: string
-        readOnly: true
-  Event:
-    required:
-    - name
-    - team_id
-    type: object
-    properties:
-      id:
-        title: ID
-        type: string
-        format: uuid
-      name:
-        title: Name
-        type: string
-        maxLength: 128
-        minLength: 1
-      course:
-        title: Course
-        type: string
-        format: uuid
-        readOnly: true
-      short_description:
-        title: Short description
-        type: string
-        x-nullable: true
-      description:
-        title: Description
-        type: string
-        x-nullable: true
-      image:
-        title: Image
-        type: string
-        readOnly: true
-        x-nullable: true
-        format: uri
-      website:
-        title: Website
-        type: string
-        format: uri
-        maxLength: 200
-        x-nullable: true
-      contacts:
-        title: Contacts
-        type: string
-        x-nullable: true
-      team_id:
-        title: Team id
-        type: string
-        format: uuid
-      plans:
-        type: array
-        items:
-          $ref: '#/definitions/Plan'
-        readOnly: true
-      start_dt:
-        title: Start dt
-        type: string
-        format: date-time
-      end_dt:
-        title: End dt
-        type: string
-        format: date-time
-  BuyEvent:
-    required:
-    - plan_id
-    type: object
-    properties:
-      plan_id:
-        title: Plan id
-        type: string
-        format: uuid
-  Lesson:
+  LessonManagement:
     required:
     - name
     type: object
@@ -949,6 +1341,43 @@ definitions:
         title: End dt
         type: string
         format: date-time
+  PlanManagement:
+    required:
+    - name
+    type: object
+    properties:
+      id:
+        title: ID
+        type: string
+        format: uuid
+      name:
+        title: Name
+        type: string
+        maxLength: 128
+        minLength: 1
+      description:
+        title: Description
+        type: string
+        x-nullable: true
+      price:
+        title: Price
+        type: string
+        readOnly: true
+      price_amount:
+        title: Price amount
+        type: string
+        format: decimal
+      price_currency:
+        title: Price currency
+        type: string
+        default: UAH
+        maxLength: 3
+        minLength: 1
+      lesson_ids:
+        type: array
+        items:
+          type: string
+          format: uuid
   PaidCourse:
     required:
     - name
@@ -984,18 +1413,49 @@ definitions:
         title: End dt
         type: string
         format: date-time
-      course:
-        $ref: '#/definitions/Course'
       plans:
         type: array
         items:
           $ref: '#/definitions/Plan'
         readOnly: true
       lessons:
-        type: array
-        items:
-          $ref: '#/definitions/Lesson'
+        title: Lessons
+        type: string
         readOnly: true
+      is_paid:
+        title: Is paid
+        type: boolean
+        readOnly: true
+  Lesson:
+    required:
+    - name
+    type: object
+    properties:
+      id:
+        title: ID
+        type: string
+        format: uuid
+      name:
+        title: Name
+        type: string
+        maxLength: 128
+        minLength: 1
+      short_description:
+        title: Short description
+        type: string
+        x-nullable: true
+      description:
+        title: Description
+        type: string
+        x-nullable: true
+      start_dt:
+        title: Start dt
+        type: string
+        format: date-time
+      end_dt:
+        title: End dt
+        type: string
+        format: date-time
   PaidLesson:
     required:
     - lesson

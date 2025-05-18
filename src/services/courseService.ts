@@ -1,5 +1,5 @@
 import api from './api';
-import {PaidCourse, PaidCourseListResponse} from "../types/Event.ts";
+import {PaidCourse, PaidCourseListResponse, Course} from "../types/Event.ts";
 
 interface CourseParams {
     search?: string;
@@ -37,7 +37,7 @@ export const courseService = {
         }
     },
 
-    managementRetrieve: async (id: string): Promise<PaidCourse> => {
+    managementRetrieve: async (id: string): Promise<Course> => {
         try {
             const response = await api.get(`/management-courses/${id}/`);
             return response.data.data;

@@ -15,7 +15,7 @@ import {
     faPlus,
     faMinus
 } from "@fortawesome/free-solid-svg-icons";
-import SimpleEditor from "../common/SimpleEditor.tsx";
+import SimpleEditor from "../Common/SimpleEditor.tsx";
 
 function EventEdit() {
     const { id } = useParams<{ id: string }>();
@@ -440,100 +440,101 @@ function EventEdit() {
                         </div>
 
                         {/* Plans Section */}
-                        <div className="space-y-4">
-                            <div className="flex justify-between items-center">
-                                <h2 className="text-xl font-semibold flex items-center gap-2">
-                                    <FontAwesomeIcon icon={faMoneyBill} className="h-5 w-5" />
-                                    Pricing Plans
-                                </h2>
-                                <button 
-                                    type="button" 
-                                    onClick={handleAddPlan}
-                                    className="btn btn-primary btn-sm"
-                                >
-                                    <FontAwesomeIcon icon={faPlus} className="h-4 w-4 mr-1" />
-                                    Add Plan
-                                </button>
-                            </div>
-                            
-                            {plans.length === 0 && (
-                                <div className="text-center p-4 bg-base-200 rounded-lg">
-                                    <p>No pricing plans added yet. Click "Add Plan" to create one.</p>
-                                </div>
-                            )}
-                            
-                            {plans.map((plan, index) => (
-                                <div key={index} className="card bg-base-200 shadow-sm">
-                                    <div className="card-body p-4">
-                                        <div className="flex justify-between items-center mb-4">
-                                            <h3 className="text-lg font-medium">Plan #{index + 1}</h3>
-                                            <button 
-                                                type="button" 
-                                                onClick={() => handleRemovePlan(index)}
-                                                className="btn btn-error btn-sm"
-                                            >
-                                                <FontAwesomeIcon icon={faMinus} className="h-4 w-4 mr-1" />
-                                                Remove
-                                            </button>
-                                        </div>
-                                        
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                            <div className="form-control">
-                                                <label className="label">
-                                                    <span className="label-text">Plan Name</span>
-                                                </label>
-                                                <input
-                                                    type="text"
-                                                    value={plan.name || ''}
-                                                    onChange={(e) => handlePlanChange(index, 'name', e.target.value)}
-                                                    placeholder="e.g. Basic, Premium, etc."
-                                                    className="input input-bordered"
-                                                />
-                                            </div>
-                                            
-                                            <div className="form-control">
-                                                <label className="label">
-                                                    <span className="label-text">Price</span>
-                                                </label>
-                                                <div className="flex gap-2">
-                                                    <input
-                                                        type="number"
-                                                        value={plan.price?.amount || 0}
-                                                        onChange={(e) => handlePlanChange(index, 'price.amount', parseFloat(e.target.value))}
-                                                        placeholder="0.00"
-                                                        min="0"
-                                                        step="0.01"
-                                                        className="input input-bordered w-full"
-                                                    />
-                                                    <select
-                                                        value={plan.price?.currency || 'USD'}
-                                                        onChange={(e) => handlePlanChange(index, 'price.currency', e.target.value)}
-                                                        className="select select-bordered w-32"
-                                                    >
-                                                        <option value="USD">USD</option>
-                                                        <option value="EUR">EUR</option>
-                                                        <option value="GBP">GBP</option>
-                                                        <option value="UAH">UAH</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        
-                                        <div className="form-control mt-4">
-                                            <label className="label">
-                                                <span className="label-text">Description</span>
-                                            </label>
-                                            <textarea
-                                                value={plan.description || ''}
-                                                onChange={(e) => handlePlanChange(index, 'description', e.target.value)}
-                                                placeholder="Describe what's included in this plan"
-                                                className="textarea textarea-bordered h-24"
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
+                        {/*<div className="space-y-4">*/}
+                        {/*    <div className="flex justify-between items-center">*/}
+                        {/*        <h2 className="text-xl font-semibold flex items-center gap-2">*/}
+                        {/*            <FontAwesomeIcon icon={faMoneyBill} className="h-5 w-5" />*/}
+                        {/*            Pricing Plans*/}
+                        {/*        </h2>*/}
+                        {/*        <button */}
+                        {/*            type="button" */}
+                        {/*            onClick={handleAddPlan}*/}
+                        {/*            className="btn btn-primary btn-sm"*/}
+                        {/*        >*/}
+                        {/*            <FontAwesomeIcon icon={faPlus} className="h-4 w-4 mr-1" />*/}
+                        {/*            Add Plan*/}
+                        {/*        </button>*/}
+                        {/*    </div>*/}
+                        {/*    */}
+                        {/*    {plans.length === 0 && (*/}
+                        {/*        <div className="text-center p-4 bg-base-200 rounded-lg">*/}
+                        {/*            <p>No pricing plans added yet. Click "Add Plan" to create one.</p>*/}
+                        {/*        </div>*/}
+                        {/*    )}*/}
+                        {/*    */}
+                        {/*    {plans.map((plan, index) => (*/}
+                        {/*        <div key={index} className="card bg-base-200 shadow-sm">*/}
+                        {/*            <div className="card-body p-4">*/}
+                        {/*                <div className="flex justify-between items-center mb-4">*/}
+                        {/*                    <h3 className="text-lg font-medium">Plan #{index + 1}</h3>*/}
+                        {/*                    <button */}
+                        {/*                        type="button" */}
+                        {/*                        onClick={() => handleRemovePlan(index)}*/}
+                        {/*                        className="btn btn-error btn-sm"*/}
+                        {/*                    >*/}
+                        {/*                        <FontAwesomeIcon icon={faMinus} className="h-4 w-4 mr-1" />*/}
+                        {/*                        Remove*/}
+                        {/*                    </button>*/}
+                        {/*                </div>*/}
+                        {/*                */}
+                        {/*                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">*/}
+                        {/*                    <div className="form-control">*/}
+                        {/*                        <label className="label">*/}
+                        {/*                            <span className="label-text">Plan Name</span>*/}
+                        {/*                        </label>*/}
+                        {/*                        <input*/}
+                        {/*                            type="text"*/}
+                        {/*                            value={plan.name || ''}*/}
+                        {/*                            onChange={(e) => handlePlanChange(index, 'name', e.target.value)}*/}
+                        {/*                            placeholder="e.g. Basic, Premium, etc."*/}
+                        {/*                            className="input input-bordered"*/}
+                        {/*                        />*/}
+                        {/*                    </div>*/}
+                        {/*                    */}
+                        {/*                    <div className="form-control">*/}
+                        {/*                        <label className="label">*/}
+                        {/*                            <span className="label-text">Price</span>*/}
+                        {/*                        </label>*/}
+                        {/*                        <div className="flex gap-2">*/}
+                        {/*                            <input*/}
+                        {/*                                type="number"*/}
+                        {/*                                value={plan.price?.amount || 0}*/}
+                        {/*                                onChange={(e) => handlePlanChange(index, 'price.amount', parseFloat(e.target.value))}*/}
+                        {/*                                placeholder="0.00"*/}
+                        {/*                                min="0"*/}
+                        {/*                                step="0.01"*/}
+                        {/*                                className="input input-bordered w-full"*/}
+                        {/*                            />*/}
+                        {/*                            <select*/}
+                        {/*                                value={plan.price?.currency || 'USD'}*/}
+                        {/*                                onChange={(e) => handlePlanChange(index, 'price.currency', e.target.value)}*/}
+                        {/*                                className="select select-bordered w-32"*/}
+                        {/*                            >*/}
+                        {/*                                <option value="USD">USD</option>*/}
+                        {/*                                <option value="EUR">EUR</option>*/}
+                        {/*                                <option value="GBP">GBP</option>*/}
+                        {/*                                <option value="UAH">UAH</option>*/}
+                        {/*                            </select>*/}
+                        {/*                        </div>*/}
+                        {/*                    </div>*/}
+                        {/*                </div>*/}
+                        {/*                */}
+                        {/*                <div className="form-control mt-4">*/}
+                        {/*                    <label className="label">*/}
+                        {/*                        <span className="label-text">Description</span>*/}
+                        {/*                    </label>*/}
+                        {/*                    <textarea*/}
+                        {/*                        value={plan.description || ''}*/}
+                        {/*                        onChange={(e) => handlePlanChange(index, 'description', e.target.value)}*/}
+                        {/*                        placeholder="Describe what's included in this plan"*/}
+                        {/*                        className="textarea textarea-bordered h-24"*/}
+                        {/*                    />*/}
+                        {/*                </div>*/}
+                        {/*            </div>*/}
+                        {/*        </div>*/}
+                        {/*    ))}*/}
+                        {/*</div>*/}
+
                     </div>
                 </div>
             </div>

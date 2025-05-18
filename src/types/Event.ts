@@ -87,6 +87,19 @@ export interface Plan {
     price: Price;
 }
 
+export interface PlanManagement {
+    id: string;
+    name: string;
+    description: string | null;
+    price: {
+        amount: number;
+        currency: string;
+    };
+    price_amount: number;
+    price_currency: string;
+    lesson_ids?: string[]; // Make this optional since it can be undefined
+}
+
 export interface PaidCourse {
     id: string;
     name: string;

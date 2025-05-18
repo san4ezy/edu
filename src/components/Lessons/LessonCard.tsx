@@ -25,7 +25,7 @@ const LessonCard: React.FC<PaidLessonCardProps> = ({ lesson }) => {
     return (
         <li className={`step step-${statusClass}`} key={lesson.id}>
 
-            <div className="card">
+            <div className="card bg-base-100 border border-base-300 shadow-sm w-full p-4">
                 <h3 className="card-title text-xl mt-8">{lesson.name}</h3>
                 <div className="card-body text-justify p-4 sm:p-6 lg:p-8">
                     <span>{new Date(lesson.start_dt).toLocaleDateString()}</span>
