@@ -1,6 +1,8 @@
 import React, { createContext, useState, useContext, useEffect, ReactNode } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import { UserRole } from "../types/User";
+import { setNavigationCallback } from "../services/api";
 
 interface AuthState {
     isAuthenticated: boolean;
@@ -70,6 +72,7 @@ const checkIsManager = (role: UserRole | null): boolean => {
 };
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
+    const navigate = useNavigate();
     const [authState, setAuthState] = useState<AuthState>({
         isAuthenticated: false,
         isManager: false,
@@ -77,6 +80,27 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         accessToken: null,
         refreshToken: null,
     });
+
+    // Set up the navigation callback for the API service
+    useEffect(() => {
+        const navigateToLogin = () => {
+            setAuthState({
+                isAuthenticated: false,
+                isManager: false,
+                role: null,
+                accessToken: null,
+                refreshToken: null,
+            });
+            navigate('/login', { replace: true });
+        };
+        
+        setNavigationCallback(navigateToLogin);
+        
+        // Cleanup function to remove the callback
+        return () => {
+            setNavigationCallback(null);
+        };
+    }, [navigate]);
 
     useEffect(() => {
         const access = localStorage.getItem("accessToken");
@@ -120,6 +144,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             accessToken: null,
             refreshToken: null,
         });
+        
+        navigate('/login', { replace: true });
     };
 
     const contextValue = {

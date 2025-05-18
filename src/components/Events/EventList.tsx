@@ -32,6 +32,11 @@ function EventList() {
                 previous: response.pagination.previous,
             });
         } catch (error) {
+            // Don't show authentication errors to the user
+            if (error.name === 'AuthenticationError') {
+                // Authentication errors are handled silently by the API service
+                return;
+            }
             console.error("Failed to fetch Events:", error);
             setEvents([]);
         } finally {

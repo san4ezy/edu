@@ -16,6 +16,14 @@ interface QueueItem {
     reject: (reason: any) => void;
 }
 
+// Navigation function that will be set from AuthContext
+let navigateToLogin: (() => void) | null = null;
+
+// Function to set the navigation callback
+export const setNavigationCallback = (callback: (() => void) | null) => {
+    navigateToLogin = callback;
+};
+
 const api = axios.create({
     baseURL: API_URL,
     headers: {
@@ -40,6 +48,25 @@ const processQueue = (error: Error | null, token: string | null) => {
     failedQueue = [];
 };
 
+// Function to handle logout and redirect
+const handleAuthFailure = (error: Error) => {
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    
+    // Use React Router navigation if available, otherwise fallback to window.location
+    if (navigateToLogin) {
+        navigateToLogin();
+    } else {
+        // Fallback to direct navigation
+        window.location.href = '/login';
+    }
+    
+    // Create a silent error that won't show to the user
+    const silentError = new Error('Authentication failed');
+    silentError.name = 'AuthenticationError';
+    return Promise.reject(silentError);
+};
+
 // This runs BEFORE a request is sent
 api.interceptors.request.use(
     (config) => {
@@ -60,7 +87,7 @@ api.interceptors.response.use(
     async (error: AxiosError) => {
         const originalRequest = error.config as AxiosRequestConfig & { _retry?: boolean };
 
-        // If the error is due to an invalid token (401) and we haven't tried refreshing yet
+        // If the error is due to an invalid token (401 or 403) and we haven't tried refreshing yet
         if ((error.response?.status === 401 || error.response?.status === 403) && !originalRequest._retry) {
             if (isRefreshing) {
                 // If we're already refreshing the token, add this request to the queue
@@ -72,6 +99,10 @@ api.interceptors.response.use(
                         return api(originalRequest);
                     })
                     .catch(err => {
+                        // If this is an auth error, handle it silently
+                        if (err.name === 'AuthenticationError') {
+                            return handleAuthFailure(err);
+                        }
                         return Promise.reject(err);
                     });
             }
@@ -83,11 +114,10 @@ api.interceptors.response.use(
                 const refreshToken = localStorage.getItem('refreshToken');
 
                 if (!refreshToken) {
-                    // No refresh token available, redirect to login
-                    localStorage.removeItem('accessToken');
-                    localStorage.removeItem('refreshToken');
-                    window.location.href = '/login';
-                    return Promise.reject(error);
+                    // No refresh token available, handle auth failure silently
+                    isRefreshing = false;
+                    processQueue(error as Error, null);
+                    return handleAuthFailure(error as Error);
                 }
 
                 // Call the refresh token endpoint
@@ -109,18 +139,15 @@ api.interceptors.response.use(
                     return api(originalRequest);
                 }
             } catch (refreshError) {
-                // If refresh token is invalid, clear all tokens and redirect to login
+                // If refresh token is invalid, handle auth failure silently
                 processQueue(refreshError as Error, null);
-                localStorage.removeItem('accessToken');
-                localStorage.removeItem('refreshToken');
-                window.location.href = '/login';
-                return Promise.reject(refreshError);
+                return handleAuthFailure(refreshError as Error);
             } finally {
                 isRefreshing = false;
             }
         }
 
-        // If the error is something other than 401 or refresh failed
+        // If the error is something other than 401/403 or refresh failed
         return Promise.reject(error);
     }
 );

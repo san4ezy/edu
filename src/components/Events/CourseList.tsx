@@ -34,6 +34,11 @@ const CourseList: React.FC = () => {
             });
             setError(null);
         } catch (err) {
+            // Don't show authentication errors to the user
+            if (err.name === 'AuthenticationError') {
+                // Authentication errors are handled silently by the API service
+                return;
+            }
             setError('Failed to load courses. Please try again later.');
             console.error('Error fetching courses:', err);
             setCourses([]);

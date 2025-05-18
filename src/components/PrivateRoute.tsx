@@ -2,11 +2,6 @@ import React from "react";
 import {Navigate} from "react-router-dom";
 import {useAuth} from "../context/AuthContext";
 
-const isAuthenticated = () => {
-    // Fake false imitates unauthorized users
-    return false;
-};
-
 interface PrivateRouteProps {
     element: React.ReactElement;
 }
