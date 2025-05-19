@@ -107,7 +107,7 @@ function LessonEdit() {
             setTimeout(() => {
                 setSaveSuccess(false);
                 // Navigate to the lesson detail page
-                navigate(`/lessons/${savedLesson.id}`);
+                navigate(`/courses/${courseId}`);
             }, 1500);
         } catch (err) {
             console.error("Failed to save lesson:", err);

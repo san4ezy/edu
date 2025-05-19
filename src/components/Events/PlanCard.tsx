@@ -1,5 +1,6 @@
 import React from "react";
 import {Plan} from "../../types/User.ts";
+import SafeHtmlRenderer from "../Common/SafeHtmlRenderer.tsx";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCheck} from "@fortawesome/free-solid-svg-icons";
 
@@ -33,6 +34,16 @@ const PlanCard: React.FC<PlanCardProps> = ({ plan, onBuy }) => {
                     <h2 className="text-3xl font-bold">{plan.name}</h2>
                     <span className="text-xl">{currencySign(plan.price.currency)}{plan.price.amount}</span>
                 </div>
+                
+                {plan.description && (
+                    <div className="mt-4">
+                        <SafeHtmlRenderer 
+                            html={plan.description} 
+                            className="prose-sm"
+                        />
+                    </div>
+                )}
+
                 <ul className="mt-6 flex flex-col gap-2 text-xs">
                     <li>
                         <FontAwesomeIcon icon={faCheck} className="size-4 me-2 inline-block text-success" />

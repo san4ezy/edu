@@ -4,6 +4,7 @@ import { useAuth } from "../../context/AuthContext";
 import courseService from "../../services/courseService.ts";
 import planService from "../../services/planService.ts";
 import LessonCard from "../Lessons/LessonCard.tsx";
+import SafeHtmlRenderer from "../Common/SafeHtmlRenderer.tsx";
 import {PaidCourse, PlanManagement} from "../../types/Event.ts";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {
@@ -150,7 +151,17 @@ function CourseDetail() {
                             </div>
 
                             <div className="prose max-w-none">
-                                <p className="text-justify">{course.description}</p>
+                                <SafeHtmlRenderer 
+                                    html={course.short_description || ''} 
+                                    fallback={<p className="text-gray-500 italic">No short description available</p>}
+                                />
+                            </div>
+
+                            <div className="prose max-w-none">
+                                <SafeHtmlRenderer 
+                                    html={course.description || ''} 
+                                    fallback={<p className="text-gray-500 italic">No description available</p>}
+                                />
                             </div>
                         </div>
 
@@ -233,9 +244,12 @@ function CourseDetail() {
                                                         {getCurrencySymbol(plan.price.currency)}{plan.price.amount}
                                                     </div>
                                                     {plan.description && (
-                                                        <p className="text-sm text-base-content/70 mt-2">
-                                                            {plan.description}
-                                                        </p>
+                                                        <div className="text-sm text-base-content/70 mt-2">
+                                                            <SafeHtmlRenderer 
+                                                                html={plan.description} 
+                                                                className="prose-sm"
+                                                            />
+                                                        </div>
                                                     )}
                                                     <div className="mt-3">
                                                         <div className="text-xs text-base-content/60">

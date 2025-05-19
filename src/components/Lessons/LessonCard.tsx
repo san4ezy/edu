@@ -2,6 +2,7 @@ import React from 'react';
 import { formatDistanceToNow, isPast } from 'date-fns';
 import {Link} from "react-router-dom";
 import {PaidLesson} from "../../types/Event.ts";
+import SafeHtmlRenderer from "../Common/SafeHtmlRenderer.tsx";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCalendar, faEdit, faPlus} from "@fortawesome/free-solid-svg-icons";
 import {useAuth} from "../../context/AuthContext.tsx";
@@ -29,7 +30,14 @@ const LessonCard: React.FC<PaidLessonCardProps> = ({ lesson }) => {
                 <h3 className="card-title text-xl mt-8">{lesson.name}</h3>
                 <div className="card-body text-justify p-4 sm:p-6 lg:p-8">
                     <span>{new Date(lesson.start_dt).toLocaleDateString()}</span>
-                    {lesson.short_description}
+                    {lesson.short_description && (
+                        <div className="prose-sm">
+                            <SafeHtmlRenderer 
+                                html={lesson.short_description}
+                                className="prose-sm"
+                            />
+                        </div>
+                    )}
                     <div className="flex items-center gap-2">
                         <FontAwesomeIcon icon={faCalendar} className="h-5 w-5 text-gray-400" />
                         <span>

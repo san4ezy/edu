@@ -3,6 +3,7 @@ import { formatDistanceToNow, isPast } from 'date-fns';
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCalendar } from '@fortawesome/free-solid-svg-icons';
+import SafeHtmlRenderer from "../Common/SafeHtmlRenderer.tsx";
 import {PaidCourse} from "../../types/Event.ts";
 
 interface CourseCardProps {
@@ -34,7 +35,12 @@ const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
             <div className="card-body">
                 <h2 className="card-title">{course.name}</h2>
                 {course.short_description && (
-                    <p className="text-gray-600 text-justify line-clamp-3">{course.short_description}</p>
+                    <div className="text-gray-600 line-clamp-3">
+                        <SafeHtmlRenderer 
+                            html={course.short_description} 
+                            className="prose-sm"
+                        />
+                    </div>
                 )}
                 <br/>
                 <div className="flex justify-between items-center text-sm text-gray-500">

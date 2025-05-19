@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import lessonService from "../../services/lessonService.ts";
 import { PaidLesson } from "../../types/Lesson.ts";
+import SafeHtmlRenderer from "../Common/SafeHtmlRenderer.tsx";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCalendar, faExclamation} from "@fortawesome/free-solid-svg-icons";
 
@@ -104,11 +105,24 @@ function LessonDetail() {
                             </div>
 
                             <div className="prose max-w-none">
-                                <p className="text-justify">{lesson.lesson.description}</p>
+                                <SafeHtmlRenderer 
+                                    html={lesson.lesson.short_description || ''} 
+                                    fallback={<p className="text-gray-500 italic">No short description available</p>}
+                                />
                             </div>
 
                             <div className="prose max-w-none">
-                                <p className="text-justify">{lesson.lesson.content}</p>
+                                <SafeHtmlRenderer 
+                                    html={lesson.lesson.description || ''} 
+                                    fallback={<p className="text-gray-500 italic">No description available</p>}
+                                />
+                            </div>
+
+                            <div className="prose max-w-none">
+                                <SafeHtmlRenderer 
+                                    html={lesson.lesson.content || ''} 
+                                    fallback={<p className="text-gray-500 italic">No content available</p>}
+                                />
                             </div>
                         </div>
 

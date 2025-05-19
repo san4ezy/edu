@@ -3,6 +3,7 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import eventService from "../../services/eventService";
 import { Event } from "../../types/Event.ts";
 import PlanCard from "./PlanCard.tsx";
+import SafeHtmlRenderer from "../Common/SafeHtmlRenderer.tsx";
 import {
     faAddressCard,
     faCalendar, faClock, faEdit,
@@ -167,7 +168,17 @@ function EventDetail() {
                             </div>
 
                             <div className="prose max-w-none">
-                                <p className="text-justify">{event.description}</p>
+                                <SafeHtmlRenderer 
+                                    html={event.short_description || ''} 
+                                    fallback={<p className="text-gray-500 italic">No short description available</p>}
+                                />
+                            </div>
+
+                            <div className="prose max-w-none">
+                                <SafeHtmlRenderer 
+                                    html={event.description || ''} 
+                                    fallback={<p className="text-gray-500 italic">No description available</p>}
+                                />
                             </div>
                         </div>
 

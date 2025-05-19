@@ -1,0 +1,213 @@
+/* Styles for SafeHtmlRenderer component */
+
+.safe-html-content {
+  /* Base styles for HTML content */
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/* Override prose styles for better integration with DaisyUI */
+.safe-html-content.prose {
+  max-width: none;
+}
+
+.safe-html-content.prose h1,
+.safe-html-content.prose h2,
+.safe-html-content.prose h3,
+.safe-html-content.prose h4,
+.safe-html-content.prose h5,
+.safe-html-content.prose h6 {
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+  font-weight: bold;
+  line-height: 1.125;
+}
+
+.safe-html-content.prose h1 {
+  font-size: 2rem;
+}
+
+.safe-html-content.prose h2 {
+  font-size: 1.75rem;
+}
+
+.safe-html-content.prose h3 {
+  font-size: 1.5rem;
+}
+
+.safe-html-content.prose h4 {
+  font-size: 1.25rem;
+}
+
+.safe-html-content.prose h5 {
+  font-size: 1.125rem;
+}
+
+.safe-html-content.prose h6 {
+  font-size: 1rem;
+}
+
+.safe-html-content.prose p {
+  margin-top: 0.75em;
+  margin-bottom: 0.75em;
+  line-height: 1.625;
+}
+
+.safe-html-content.prose ul,
+.safe-html-content.prose ol {
+  margin-top: 0.75em;
+  margin-bottom: 0.75em;
+  padding-left: 1.25em;
+}
+
+.safe-html-content.prose li {
+  margin-top: 0.25em;
+  margin-bottom: 0.25em;
+}
+
+.safe-html-content.prose a {
+  color: hsl(var(--p));
+  text-decoration: underline;
+  text-decoration-color: hsl(var(--p) / 0.3);
+  transition: all 0.2s;
+}
+
+.safe-html-content.prose a:hover {
+  text-decoration-color: hsl(var(--p));
+}
+
+.safe-html-content.prose blockquote {
+  border-left: 4px solid hsl(var(--p));
+  padding-left: 1rem;
+  font-style: italic;
+  margin: 1.5em 0;
+  color: hsl(var(--bc) / 0.8);
+}
+
+.safe-html-content.prose pre {
+  background-color: hsl(var(--b2));
+  padding: 1rem;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+  margin: 1em 0;
+}
+
+.safe-html-content.prose code {
+  background-color: hsl(var(--b2));
+  padding: 0.125rem 0.25rem;
+  border-radius: 0.25rem;
+  font-size: 0.875em;
+}
+
+.safe-html-content.prose pre code {
+  background-color: transparent;
+  padding: 0;
+  border-radius: 0;
+}
+
+.safe-html-content.prose mark {
+  background-color: hsl(var(--wa) / 0.3);
+  padding: 0.125rem 0.25rem;
+  border-radius: 0.25rem;
+}
+
+.safe-html-content.prose img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+  margin: 1em 0;
+}
+
+.safe-html-content.prose hr {
+  border: none;
+  border-top: 1px solid hsl(var(--bc) / 0.2);
+  margin: 2em 0;
+}
+
+/* Small prose variant */
+.safe-html-content.prose-sm {
+  font-size: 0.875rem;
+  line-height: 1.7;
+}
+
+.safe-html-content.prose-sm h1 {
+  font-size: 1.75rem;
+}
+
+.safe-html-content.prose-sm h2 {
+  font-size: 1.5rem;
+}
+
+.safe-html-content.prose-sm h3 {
+  font-size: 1.25rem;
+}
+
+.safe-html-content.prose-sm h4 {
+  font-size: 1.125rem;
+}
+
+.safe-html-content.prose-sm h5,
+.safe-html-content.prose-sm h6 {
+  font-size: 1rem;
+}
+
+/* Line clamp utilities for card previews */
+.line-clamp-3 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
+/* Alert-style blocks for enhanced content */
+.safe-html-content .alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  margin: 1rem 0;
+}
+
+.safe-html-content .alert-info {
+  background-color: hsl(var(--in) / 0.1);
+  border: 1px solid hsl(var(--in) / 0.3);
+  color: hsl(var(--inc));
+}
+
+.safe-html-content .alert-success {
+  background-color: hsl(var(--su) / 0.1);
+  border: 1px solid hsl(var(--su) / 0.3);
+  color: hsl(var(--suc));
+}
+
+.safe-html-content .alert-warning {
+  background-color: hsl(var(--wa) / 0.1);
+  border: 1px solid hsl(var(--wa) / 0.3);
+  color: hsl(var(--wac));
+}
+
+.safe-html-content .alert-error {
+  background-color: hsl(var(--er) / 0.1);
+  border: 1px solid hsl(var(--er) / 0.3);
+  color: hsl(var(--erc));
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .safe-html-content.prose {
+    font-size: 0.9rem;
+  }
+  
+  .safe-html-content.prose h1 {
+    font-size: 1.75rem;
+  }
+  
+  .safe-html-content.prose h2 {
+    font-size: 1.5rem;
+  }
+  
+  .safe-html-content.prose h3 {
+    font-size: 1.25rem;
+  }
+}
