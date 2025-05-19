@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
-import { useParams, Link, useNavigate, useLocation } from "react-router-dom";
+import {useEffect, useState} from "react";
+import {useParams, Link, useNavigate, useLocation} from "react-router-dom";
 import planService from "../../services/planService";
 import courseService from "../../services/courseService";
-import { Plan, PlanManagement, Lesson } from "../../types/Event";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faExclamation, faSave, faCheck } from "@fortawesome/free-solid-svg-icons";
+import {PlanManagement, Lesson} from "../../types/Event";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faExclamation, faSave, faCheck} from "@fortawesome/free-solid-svg-icons";
 
 interface PlanFormData {
     name: string;
@@ -15,12 +15,11 @@ interface PlanFormData {
 }
 
 function PlanEdit() {
-    const { courseId, planId } = useParams<{ courseId: string; planId?: string }>();
+    const {courseId, planId} = useParams<{ courseId: string; planId?: string }>();
     const navigate = useNavigate();
     const location = useLocation();
     const isNewPlan = location.pathname.includes("/add") || !planId;
-    
-    const [plan, setPlan] = useState<PlanManagement | null>(null);
+
     const [formData, setFormData] = useState<PlanFormData>({
         name: "",
         description: "",
@@ -40,7 +39,7 @@ function PlanEdit() {
 
             try {
                 setLoading(true);
-                
+
                 // Fetch course details to get lessons
                 const courseData = await courseService.managementRetrieve(courseId);
                 setCourseLessons(courseData.lessons);
@@ -48,13 +47,100 @@ function PlanEdit() {
                 if (!isNewPlan && planId) {
                     // Fetch existing plan details
                     const planData = await planService.retrieve(courseId, planId);
-                    setPlan(planData);
+                    
+                    // Debug: Log the full plan data to understand the structure
+                    console.log("Plan data from API:", planData);
+                    console.log("Plan lesson_ids field:", planData.lesson_ids);
+                    console.log("All plan data keys:", Object.keys(planData));
+                    console.log("Full plan data JSON:", JSON.stringify(planData, null, 2));
+                    
+                    // Try to get lesson IDs from the plans list endpoint as a fallback
+                    console.log("Trying to fetch lesson IDs from plans list...");
+                    try {
+                        const plansList = await planService.list(courseId);
+                        const planFromList = plansList.data.find(p => p.id === planId);
+                        console.log("Plan from list:", planFromList);
+                        if (planFromList) {
+                            console.log("Plan from list lesson_ids:", planFromList.lesson_ids);
+                        }
+                    } catch (listError) {
+                        console.warn("Failed to fetch from plans list:", listError);
+                    }
+                    
+                    // Handle lesson_ids properly - check multiple possible field names
+                    let lessonIds: string[] = [];
+                    
+                    // First, try to find lesson IDs in any possible location
+                    const checkAllFields = (obj: any, prefix = ""): void => {
+                        Object.keys(obj).forEach(key => {
+                            const value = obj[key];
+                            const fullKey = prefix ? `${prefix}.${key}` : key;
+                            
+                            if (Array.isArray(value)) {
+                                console.log(`Found array at ${fullKey}:`, value);
+                                // Check if this array contains lesson-like structures
+                                if (value.length > 0) {
+                                    const firstItem = value[0];
+                                    if (typeof firstItem === 'string' && (
+                                        firstItem.length === 36 || // UUID length
+                                        firstItem.includes('-') // UUID format
+                                    )) {
+                                        console.log(`Potential lesson IDs at ${fullKey}:`, value);
+                                    } else if (typeof firstItem === 'object' && firstItem && 'id' in firstItem) {
+                                        console.log(`Potential lesson objects at ${fullKey}:`, value);
+                                    }
+                                }
+                            } else if (typeof value === 'object' && value !== null) {
+                                checkAllFields(value, fullKey);
+                            }
+                        });
+                    };
+                    
+                    checkAllFields(planData);
+                    
+                    // Check various possible field names that might contain lesson IDs
+                    if (planData.lesson_ids && Array.isArray(planData.lesson_ids)) {
+                        lessonIds = planData.lesson_ids.map(id => String(id));
+                        console.log("Found lesson_ids as array:", lessonIds);
+                    } else if (planData.lesson_ids) {
+                        // Handle case where lesson_ids might be a single value or string
+                        lessonIds = [String(planData.lesson_ids)];
+                        console.log("Found lesson_ids as single value:", lessonIds);
+                    } else if ((planData as any).lessons && Array.isArray((planData as any).lessons)) {
+                        // Maybe the API returns lessons as full objects
+                        lessonIds = (planData as any).lessons.map((lesson: any) => String(lesson.id || lesson));
+                        console.log("Found lessons as objects:", lessonIds);
+                    } else if ((planData as any).lessonIds && Array.isArray((planData as any).lessonIds)) {
+                        // Check camelCase version
+                        lessonIds = (planData as any).lessonIds.map(id => String(id));
+                        console.log("Found lessonIds (camelCase):", lessonIds);
+                    } else if ((planData as any).lesson_list && Array.isArray((planData as any).lesson_list)) {
+                        // Check lesson_list field
+                        lessonIds = (planData as any).lesson_list.map((lesson: any) => String(lesson.id || lesson));
+                        console.log("Found lesson_list:", lessonIds);
+                    } else {
+                        // As a last resort, try to get lesson IDs from the plans list response
+                        try {
+                            const plansList = await planService.list(courseId);
+                            const planFromList = plansList.data.find(p => p.id === planId);
+                            if (planFromList && planFromList.lesson_ids && Array.isArray(planFromList.lesson_ids)) {
+                                lessonIds = planFromList.lesson_ids.map(id => String(id));
+                                console.log("Found lesson_ids from plans list:", lessonIds);
+                            }
+                        } catch (listError) {
+                            console.warn("Failed to get lesson IDs from plans list:", listError);
+                        }
+                    }
+                    
+                    console.log("Final processed lesson_ids:", lessonIds);
+                    console.log("Course lessons available:", courseLessons.map(l => l.id));
+
                     setFormData({
-                        name: planData.name,
+                        name: planData.name || "",
                         description: planData.description || "",
-                        price_amount: planData.price.amount,
-                        price_currency: planData.price.currency,
-                        lesson_ids: planData.lesson_ids || []
+                        price_amount: planData.price?.amount || planData.price_amount || 0,
+                        price_currency: planData.price?.currency || planData.price_currency || "UAH",
+                        lesson_ids: lessonIds
                     });
                 }
                 setError(null);
@@ -70,7 +156,7 @@ function PlanEdit() {
     }, [courseId, planId, isNewPlan]);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-        const { name, value } = e.target;
+        const {name, value} = e.target;
         setFormData(prev => ({
             ...prev,
             [name]: name === 'price_amount' ? parseFloat(value) || 0 : value
@@ -92,17 +178,34 @@ function PlanEdit() {
         try {
             setSaving(true);
 
+            // Prepare the data for API call with both formats for compatibility
+            const saveData = {
+                name: formData.name,
+                description: formData.description,
+                price_amount: formData.price_amount,
+                price_currency: formData.price_currency,
+                lesson_ids: formData.lesson_ids,
+                // Also include the price object format in case the API expects it
+                price: {
+                    amount: formData.price_amount,
+                    currency: formData.price_currency
+                }
+            };
+
+            console.log("Saving plan with data:", JSON.stringify(saveData, null, 2));
+
             let savedPlan;
             if (isNewPlan) {
-                savedPlan = await planService.create(courseId, formData);
+                savedPlan = await planService.create(courseId, saveData);
             } else if (planId) {
-                savedPlan = await planService.update(courseId, planId, formData);
+                savedPlan = await planService.update(courseId, planId, saveData);
             } else {
                 throw new Error("Missing plan ID");
             }
 
+            console.log("Save response:", savedPlan);
+
             setSaveSuccess(true);
-            setPlan(savedPlan);
 
             // Reset success message after 3 seconds and navigate back to course
             setTimeout(() => {
@@ -129,7 +232,7 @@ function PlanEdit() {
         return (
             <div className="container mx-auto p-4 text-center">
                 <div className="alert alert-error max-w-md mx-auto">
-                    <FontAwesomeIcon icon={faExclamation} className="h-6 w-6" />
+                    <FontAwesomeIcon icon={faExclamation} className="h-6 w-6"/>
                     <span>{error}</span>
                 </div>
                 <button
@@ -163,12 +266,13 @@ function PlanEdit() {
                     >
                         {saving ? (
                             <>
-                                <span className="loading loading-spinner loading-xs"></span>
+                                <span
+                                    className="loading loading-spinner loading-xs"></span>
                                 Saving...
                             </>
                         ) : (
                             <>
-                                <FontAwesomeIcon icon={faSave} className="h-4 w-4" />
+                                <FontAwesomeIcon icon={faSave} className="h-4 w-4"/>
                                 Save
                             </>
                         )}
@@ -176,7 +280,8 @@ function PlanEdit() {
                 </div>
             </div>
 
-            <div className="card bg-base-100 shadow-xl rounded-none sm:rounded-xl overflow-hidden">
+            <div
+                className="card bg-base-100 shadow-xl rounded-none sm:rounded-xl overflow-hidden">
                 <div className="card-body p-4 sm:p-6 lg:p-8">
                     <div className="flex flex-col gap-6">
                         <h1 className="text-2xl sm:text-3xl font-bold">
@@ -259,17 +364,22 @@ function PlanEdit() {
                                     {formData.lesson_ids.length} of {courseLessons.length} selected
                                 </span>
                             </label>
-                            <div className="space-y-2 max-h-64 overflow-y-auto border border-base-300 rounded-lg p-4">
+                            
+                            <div
+                                className="space-y-2 max-h-64 overflow-y-auto border border-base-300 rounded-lg p-4">
                                 {courseLessons.length === 0 ? (
-                                    <div className="text-center py-4 text-base-content/60">
+                                    <div
+                                        className="text-center py-4 text-base-content/60">
                                         No lessons available in this course.
-                                        <Link to={`/courses/${courseId}/lessons/add`} className="link link-primary ml-2">
+                                        <Link to={`/courses/${courseId}/lessons/add`}
+                                              className="link link-primary ml-2">
                                             Add a lesson?
                                         </Link>
                                     </div>
                                 ) : (
                                     courseLessons.map(lesson => (
-                                        <div key={lesson.id} className="flex items-center gap-3 p-2 hover:bg-base-200 rounded">
+                                        <div key={lesson.id}
+                                             className="flex items-center gap-3 p-2 hover:bg-base-200 rounded">
                                             <input
                                                 type="checkbox"
                                                 id={`lesson-${lesson.id}`}
@@ -277,15 +387,10 @@ function PlanEdit() {
                                                 onChange={() => handleLessonToggle(lesson.id)}
                                                 className="checkbox checkbox-primary"
                                             />
-                                            <label htmlFor={`lesson-${lesson.id}`} className="flex-1 cursor-pointer">
+                                            <label htmlFor={`lesson-${lesson.id}`}
+                                                   className="flex-1 cursor-pointer">
                                                 <div className="font-medium">{lesson.name}</div>
-                                                {lesson.short_description && (
-                                                    <div className="text-sm text-base-content/60">{lesson.short_description}</div>
-                                                )}
                                             </label>
-                                            {formData.lesson_ids.includes(lesson.id) && (
-                                                <FontAwesomeIcon icon={faCheck} className="h-4 w-4 text-success" />
-                                            )}
                                         </div>
                                     ))
                                 )}
