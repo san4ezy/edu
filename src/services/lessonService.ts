@@ -17,6 +17,9 @@ interface LessonResponse {
     service_data: any;
 }
 
+// Simple cache to prevent duplicate requests
+const lessonCache = new Map<string, Promise<PaidLesson>>();
+
 export const lessonService = {
     list: async (params?: LessonParams): Promise<PaidLessonListResponse> => {
         try {
@@ -30,8 +33,25 @@ export const lessonService = {
 
     retrieve: async (id: string): Promise<PaidLesson> => {
         try {
-            const response = await api.get(`/paid-lessons/${id}/`);
-            return response.data.data;
+            // Check if we already have a request in progress for this ID
+            if (lessonCache.has(id)) {
+                return await lessonCache.get(id)!;
+            }
+
+            // Create new request and cache it
+            const requestPromise = api.get(`/paid-lessons/${id}/`).then(response => response.data.data);
+            lessonCache.set(id, requestPromise);
+
+            // Clean up cache after request completes (success or failure)
+            requestPromise
+                .finally(() => {
+                    lessonCache.delete(id);
+                })
+                .catch(() => {
+                    // Error handled by the component
+                });
+
+            return await requestPromise;
         } catch (error) {
             throw error;
         }

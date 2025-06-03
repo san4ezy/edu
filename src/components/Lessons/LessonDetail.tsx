@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import lessonService from "../../services/lessonService.ts";
 import { PaidLesson } from "../../types/Lesson.ts";
 import SafeHtmlRenderer from "../Common/SafeHtmlRenderer.tsx";
+import ExternalFiles from "../Common/ExternalFiles.tsx";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCalendar, faExclamation} from "@fortawesome/free-solid-svg-icons";
 
@@ -12,21 +13,47 @@ function LessonDetail() {
     const [lesson, setLesson] = useState<PaidLesson | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const isMountedRef = useRef(true);
+    const lastFetchIdRef = useRef<string | null>(null);
+    const isCurrentlyFetchingRef = useRef(false);
+
+    useEffect(() => {
+        isMountedRef.current = true;
+        return () => {
+            isMountedRef.current = false;
+        };
+    }, []);
 
     useEffect(() => {
         const fetchDetails = async () => {
             if (!id) return;
 
+            // Check if we're already fetching this ID or if it's the same as the last fetch
+            if (isCurrentlyFetchingRef.current || lastFetchIdRef.current === id) {
+                return;
+            }
+
             try {
+                isCurrentlyFetchingRef.current = true;
+                lastFetchIdRef.current = id;
                 setLoading(true);
-                const data = await lessonService.retrieve(id);
-                setLesson(data);
                 setError(null);
+                
+                const data = await lessonService.retrieve(id);
+                
+                if (isMountedRef.current) {
+                    setLesson(data);
+                }
             } catch (err) {
-                console.error("Failed to fetch lesson details:", err);
-                setError("Failed to load lesson details. You should buy it first.");
+                if (isMountedRef.current) {
+                    console.error("Failed to fetch lesson details:", err);
+                    setError("Failed to load lesson details. You should buy it first.");
+                }
             } finally {
-                setLoading(false);
+                if (isMountedRef.current) {
+                    setLoading(false);
+                }
+                isCurrentlyFetchingRef.current = false;
             }
         };
 
@@ -124,6 +151,13 @@ function LessonDetail() {
                                     fallback={<p className="text-gray-500 italic">No content available</p>}
                                 />
                             </div>
+
+                            {/* External Files Section */}
+                            {lesson.lesson.external_files && lesson.lesson.external_files.length > 0 && (
+                                <div className="mt-8">
+                                    <ExternalFiles files={lesson.lesson.external_files} />
+                                </div>
+                            )}
                         </div>
 
                     </div>
